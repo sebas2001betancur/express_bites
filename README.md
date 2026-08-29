@@ -1,6 +1,6 @@
-# ExpressBites (Pick & Go)
+# ExpressBites
 
-App móvil en Flutter (Riverpod) para pedir comida anticipada en las cafeterías del campus: catálogo personalizable, franjas de recogida Pick & Go, y ticket digital con código único para evitar la fila física.
+App móvil en Flutter para pedir comida anticipada en las cafeterías del campus: catálogo personalizable, franjas de recogida Pick & Go, y ticket digital con código único para evitar la fila física.
 
 Las especificaciones completas del proyecto (problema, stakeholders, actores, alcance, reglas de negocio, historias de usuario, casos de uso y arquitectura) están en [`docs/alcance.md`](docs/alcance.md).
 
