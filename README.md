@@ -6,6 +6,6 @@ Las especificaciones completas del proyecto (problema, stakeholders, actores, al
 
 ## Integrantes
 
-- Sebastian Santiago Betancur Alvarez 
+- Sebastian Santiago Betancur Alvarez - @sebas2001betancur
 - Esteban Ramirez
-- Sara Betancur
+- Sara Betancur - @Sarabe1110
