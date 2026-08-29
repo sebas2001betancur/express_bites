@@ -1,5 +1,4 @@
 # ExpressBites
-# ExpressBites
 
 App móvil en Flutter para pedir comida anticipada en las cafeterías del campus: catálogo personalizable, franjas de recogida Pick & Go, y ticket digital con código único para evitar la fila física.
 
