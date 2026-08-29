@@ -1,4 +1,4 @@
-# Especificaciones del proyecto: ExpressBites (Pick & Go)
+# Especificaciones del proyecto: ExpressBites
 
 ## Problema
 
