@@ -60,6 +60,9 @@ Hoy en día, el usuario se ve obligado a perder la totalidad de su tiempo de des
 
 ### Incluye
 
+* Inicio de sesión con correo y contraseña y selección de rol (Cliente / Personal de barra).
+* Perfil del cliente con sus datos de cuenta e historial de pedidos anteriores.
+* Vista del personal de barra con los pedidos entrantes ordenados por franja de recogida.
 * Catálogo visual categorizado (Bebidas calientes/frías, Repostería, Combos, Especiales del día).
 * Modificador y personalizador de productos interactivo (tamaños, tipo de leche, endulzantes, agregados y notas) con actualización reactiva inmediata de precio vía Riverpod.
 * Carrito de compras reactivo con modificación de cantidades y desglose de subtotales.
@@ -167,6 +170,17 @@ Hoy en día, el usuario se ve obligado a perder la totalidad de su tiempo de des
   * Muestra el código de reclamo (**Claim ID**), la franja horaria, el desglose de productos y el total.
   * Lee la información directamente desde el almacenamiento local (*Hive* / *shared_preferences*).
 
+### HU-08: Consulta del historial de pedidos
+
+* **Como** cliente frecuente de la cafetería,  
+* **Quiero** ver la lista de mis pedidos anteriores desde mi perfil,  
+* **Para** recordar qué pedí, cuánto pagué y repetir fácilmente mis combinaciones favoritas.  
+* **Criterios de aceptación:**
+  * Desde el perfil, el botón "Pedidos recientes" abre el historial.
+  * Cada pedido muestra su Claim ID, fecha, franja de recogida, total y estado final.
+  * Los pedidos se ordenan del más reciente al más antiguo.
+  * Si el cliente no tiene pedidos anteriores, se muestra un mensaje indicándolo.
+
 ---
 
 ## Casos de uso
@@ -249,26 +263,38 @@ Hoy en día, el usuario se ve obligado a perder la totalidad de su tiempo de des
 ## Flujo de pantallas
 
 ```
-[ 1. Home / Catálogo ]
+[ 1. Login ]
        │
-       ├──► [ 2. Detalle y Personalización de Producto ]
-       │            │
-       │            └── (Agrega con Riverpod y regresa al catálogo)
+       ├── (Rol: Cliente) ──► [ 2. Home / Catálogo ]
+       │                            │
+       │                            ├──► [ 3. Detalle y Personalización de Producto ]
+       │                            │            │
+       │                            │            └── (Agrega con Riverpod y regresa al catálogo)
+       │                            │
+       │                            ├──► [ 4. Carrito de Compras & Selección de Franja ]
+       │                            │            │
+       │                            │            └──► [ 5. Confirmación & Ticket Digital Activo ]
+       │                            │                         │
+       │                            │                         └── (Volver al Inicio)
+       │                            │
+       │                            ├──► [ 6. Visualización de Ticket Activo (Offline) ]
+       │                            │
+       │                            └──► [ 7. Perfil ]
+       │                                         │
+       │                                         └──► [ 8. Historial de Pedidos ]
        │
-       ├──► [ 3. Carrito de Compras & Selección de Franja ]
-       │            │
-       │            └──► [ 4. Confirmación & Ticket Digital Activo ]
-       │                         │
-       │                         └── (Volver al Inicio)
-       │
-       └──► [ 5. Visualización de Ticket Activo (Offline) ]
+       └── (Rol: Personal de barra) ──► [ 9. Pedidos Entrantes del Personal ]
 ```
 
-1. **Pantalla Principal (Home / Catálogo):** Header con buscador y badge reactivo del carrito; carrusel horizontal de categorías; grid de productos con imagen, título y precio base; acceso directo al ticket activo.
-2. **Pantalla de Detalle y Personalización:** Fotografía ampliada, selección de opciones (radio buttons para variantes únicas, chips para adiciones) y barra inferior fija con precio total calculado en tiempo real.
-3. **Pantalla de Carrito de Compras:** Lista de ítems con botones (+ / -), campo de notas, selector de horario de recogida (*Time Slots*) y botón de confirmación (*Checkout*).
-4. **Pantalla de Ticket Digital:** Tarjeta central destacada con código alfanumérico/QR de reclamo, hora pactada de entrega, estado ("En preparación" / "Listo") y desglose.
-5. **Pantalla de Ticket Activo (Offline):** Vista accesible sin conexión que carga desde la persistencia local (*Hive* / *shared_preferences*) el ticket del pedido en curso para mostrarlo en el mostrador.
+1. **Pantalla de Login:** Formulario con correo y contraseña validados (el correo debe contener `@` y `.`, la contraseña mínimo 6 caracteres) y selector de rol (Cliente / Personal de barra) que define a qué pantalla se ingresa.
+2. **Pantalla Principal (Home / Catálogo):** Header con buscador y badge reactivo del carrito; carrusel horizontal de categorías; grid de productos con imagen, título y precio base; accesos directos al ticket activo y al perfil.
+3. **Pantalla de Detalle y Personalización:** Fotografía ampliada, selección de opciones (radio buttons para variantes únicas, chips para adiciones) y barra inferior fija con precio total calculado en tiempo real.
+4. **Pantalla de Carrito de Compras:** Lista de ítems con botones (+ / -), campo de notas, selector de horario de recogida (*Time Slots*) y botón de confirmación (*Checkout*).
+5. **Pantalla de Ticket Digital:** Tarjeta central destacada con código alfanumérico/QR de reclamo, hora pactada de entrega, estado ("En preparación" / "Listo") y desglose.
+6. **Pantalla de Ticket Activo (Offline):** Vista accesible sin conexión que carga desde la persistencia local (*Hive* / *shared_preferences*) el ticket del pedido en curso para mostrarlo en el mostrador.
+7. **Pantalla de Perfil:** Datos de la cuenta del cliente (correo y contraseña con opción de mostrar/ocultar) y botón "Pedidos recientes" que lleva al historial.
+8. **Pantalla de Historial de Pedidos:** Lista cronológica de los pedidos anteriores del cliente, cada uno con su Claim ID, fecha, franja de recogida, total y estado final ("Entregado" / "No reclamado").
+9. **Pantalla de Pedidos Entrantes (Personal de barra):** Lista de comandas programadas ordenadas por franja de recogida, con el detalle de personalizaciones y el estado de cada pedido.
 
 ---
 

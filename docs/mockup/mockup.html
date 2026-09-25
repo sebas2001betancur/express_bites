@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExpressBites Mockup</title>
+<style>
+  :root {
+    --primary: #E65100;
+    --on-primary: #FFFFFF;
+    --primary-container: #FFDBCB;
+    --on-primary-container: #5A1B00;
+    --surface: #FAFAFA;
+    --surface-card: #FFFFFF;
+    --surface-high: #F5EDE9;
+    --outline: #D7C2B8;
+    --text: #1F2937;
+    --text-muted: #6B7280;
+    --success: #2E7D32;
+    --error: #BA1A1A;
+    --page-bg: #EDE7E3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Roboto, "Segoe UI", system-ui, sans-serif;
+    background: var(--page-bg);
+    color: var(--text);
+    padding: 32px 16px;
+  }
+  header.pagina { max-width: 1200px; margin: 0 auto 28px; }
+  header.pagina h1 { font-size: 28px; }
+  header.pagina p { color: var(--text-muted); margin-top: 6px; }
+  .grid {
+    display: flex; flex-wrap: wrap; gap: 36px 28px;
+    justify-content: center; max-width: 1240px; margin: 0 auto;
+  }
+  figure { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  figcaption { font-weight: 600; font-size: 15px; }
+  figcaption span { color: var(--primary); }
+
+  .phone {
+    width: 380px; height: 800px; padding: 10px;
+    background: #111; border-radius: 44px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.18);
+  }
+  .screen {
+    width: 360px; height: 780px; border-radius: 34px; overflow: hidden;
+    background: var(--surface); display: flex; flex-direction: column; position: relative;
+  }
+  .status {
+    height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 22px; font-size: 13px; font-weight: 600;
+  }
+  .status .ic { display: flex; gap: 4px; align-items: center; }
+  .status svg { width: 15px; height: 15px; }
+  .appbar {
+    height: 56px; flex-shrink: 0; display: flex; align-items: center; gap: 4px;
+    padding: 0 6px 0 4px; background: var(--surface);
+  }
+  .appbar h2 { font-size: 21px; font-weight: 500; flex: 1; padding-left: 8px; }
+  .iconbtn {
+    width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; position: relative;
+  }
+  .iconbtn svg { width: 24px; height: 24px; }
+  .badge {
+    position: absolute; top: 6px; right: 6px; min-width: 16px; height: 16px; border-radius: 8px;
+    background: var(--error); color: #fff; font-size: 10px; display: grid; place-items: center; font-weight: 700;
+  }
+  .body { flex: 1; overflow: hidden; padding: 12px 16px; display: flex; flex-direction: column; }
+  svg { fill: currentColor; }
+
+  .card {
+    background: var(--surface-card); border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.12);
+  }
+  .btn {
+    height: 48px; border-radius: 24px; background: var(--primary); color: var(--on-primary);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-weight: 600; font-size: 15px;
+  }
+  .btn svg { width: 20px; height: 20px; }
+  .btn.outline { background: transparent; color: var(--primary); border: 1.5px solid var(--outline); }
+  .field {
+    height: 56px; border: 1.5px solid var(--outline); border-radius: 6px;
+    display: flex; align-items: center; gap: 12px; padding: 0 12px; position: relative; background: var(--surface-card);
+  }
+  .field svg { width: 22px; height: 22px; color: var(--text-muted); }
+  .field label {
+    position: absolute; top: -9px; left: 10px; background: var(--surface-card); padding: 0 4px;
+    font-size: 12px; color: var(--text-muted);
+  }
+  .field.focus { border-color: var(--primary); border-width: 2px; }
+  .field.focus label { color: var(--primary); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    height: 32px; padding: 0 14px; border: 1px solid var(--outline); border-radius: 8px;
+    display: flex; align-items: center; gap: 6px; font-size: 14px; white-space: nowrap; background: var(--surface-card);
+  }
+  .chip.sel { background: var(--primary-container); border-color: var(--primary-container); color: var(--on-primary-container); }
+  .chip svg { width: 16px; height: 16px; }
+  .muted { color: var(--text-muted); }
+  .small { font-size: 13px; }
+  .title { font-size: 17px; font-weight: 600; }
+  .price { font-size: 17px; font-weight: 500; }
+  .row { display: flex; align-items: center; gap: 12px; }
+  .between { justify-content: space-between; }
+  .thumb {
+    width: 72px; height: 72px; border-radius: 12px; background: var(--surface-high);
+    display: grid; place-items: center; color: var(--primary); flex-shrink: 0;
+  }
+  .thumb svg { width: 34px; height: 34px; }
+  .divider { height: 1px; background: #EEE4DF; }
+  .tile { display: flex; align-items: center; gap: 16px; padding: 14px 16px; }
+  .tile > svg { width: 24px; height: 24px; color: var(--text-muted); flex-shrink: 0; }
+  .tile .t { font-size: 15px; }
+  .tile .s { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .spacer { flex: 1; }
+  .radio, .check { display: flex; align-items: center; gap: 14px; padding: 7px 4px; font-size: 15px; }
+  .radio i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-muted); display: grid; place-items: center; }
+  .radio.on i { border-color: var(--primary); }
+  .radio.on i::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
+  .check i { width: 18px; height: 18px; border-radius: 3px; border: 2px solid var(--text-muted); display: grid; place-items: center; }
+  .check.on i { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .check.on i svg { width: 14px; height: 14px; }
+  .estado {
+    display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600;
+  }
+  .estado.ok { background: #DCEFDC; color: var(--success); }
+  .estado.no { background: #FBE1DE; color: var(--error); }
+  .estado.prep { background: var(--primary-container); color: var(--on-primary-container); }
+  .nav-hint {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 4px; border-radius: 2px; background: #1F2937; opacity: .35;
+  }
+
+  body.single { padding: 0; background: #FFFFFF; }
+  body.single header.pagina, body.single figcaption { display: none; }
+  body.single .grid { display: block; }
+  body.single figure { display: none; }
+  body.single figure.show { display: block; }
+  body.single .phone { box-shadow: none; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></symbol>
+    <symbol id="i-email" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9V6zM18 20H6V10h12v10z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
+    <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M23.64 7c-.45-.34-4.93-4-11.64-4-1.5 0-2.89.19-4.15.48L18.18 13.8 23.64 7zm-6.6 8.22L3.27 1.44 2 2.72l2.05 2.06C1.91 5.76.59 6.82.36 7l11.63 14.49.01.01.01-.01 3.9-4.86 3.32 3.32 1.27-1.27-3.46-3.46z"/></symbol>
+    <symbol id="i-restaurant" viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></symbol>
+    <symbol id="i-cafe" viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></symbol>
+    <symbol id="i-login" viewBox="0 0 24 24"><path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z"/></symbol>
+    <symbol id="i-add-cart" viewBox="0 0 24 24"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></symbol>
+    <symbol id="i-signal" viewBox="0 0 24 24"><path d="M2 22h20V2z"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></symbol>
+    <symbol id="i-battery" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></symbol>
+  </defs>
+</svg>
+
+<header class="pagina">
+  <h1>ExpressBites — Mockup de pantallas</h1>
+  <p>Propuesta visual de cada pantalla (P-01 a P-09) en un teléfono Android de 360 × 780 dp.</p>
+</header>
+
+<main class="grid">
+
+  <!-- P-01 Login -->
+  <figure data-p="1">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="body" style="padding:24px 24px; justify-content:center; gap:0">
+        <div style="text-align:center; color:var(--primary)"><svg style="width:84px;height:84px"><use href="#i-cafe"/></svg></div>
+        <div style="text-align:center; font-size:30px; font-weight:700; margin-top:16px">ExpressBites</div>
+        <div style="text-align:center; font-size:16px; margin-top:6px" class="muted">Pick &amp; Go</div>
+        <div class="field focus" style="margin-top:34px"><label>Correo electrónico</label><svg><use href="#i-email"/></svg><span>sara@correo.iue.edu.co</span></div>
+        <div class="field" style="margin-top:18px"><label>Contraseña</label><svg><use href="#i-lock"/></svg><span style="letter-spacing:2px">••••••••</span></div>
+        <div style="font-size:14px; font-weight:600; margin-top:22px">Ingresas como</div>
+        <div class="chips" style="margin-top:10px">
+          <span class="chip sel"><svg><use href="#i-check"/></svg>Cliente</span>
+          <span class="chip">Personal de barra</span>
+        </div>
+        <div class="btn" style="margin-top:28px"><svg><use href="#i-login"/></svg>Ingresar</div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-01</span> Login</figcaption>
+  </figure>
+
+  <!-- P-02 Catálogo -->
+  <figure data-p="2">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="appbar">
+        <h2>ExpressBites</h2>
+        <span class="iconbtn"><svg><use href="#i-receipt"/></svg></span>
+        <span class="iconbtn"><svg><use href="#i-cart"/></svg><span class="badge">2</span></span>
+        <span class="iconbtn"><svg><use href="#i-person"/></svg></span>
+      </div>
+      <div class="body" style="padding:8px 0 0; gap:10px">
+        <div class="chips" style="flex-wrap:nowrap; overflow:hidden; padding:0 12px">
+          <span class="chip sel"><svg><use href="#i-check"/></svg>Todas</span>
+          <span class="chip">Bebidas calientes</span>
+          <span class="chip">Bebidas frías</span>
+          <span class="chip">Repostería</span>
+        </div>
+        <div class="small muted" style="padding:0 16px">5 productos disponibles</div>
+        <div style="display:flex; flex-direction:column; gap:10px; padding:0 12px">
+          <div class="card row" style="padding:12px"><div class="thumb"><svg><use href="#i-restaurant"/></svg></div><div style="flex:1"><div class="title">Café Americano</div><div class="small muted">Bebidas calientes</div><div class="small muted">3 min</div></div><div class="price">$3500</div></div>
+          <div class="card row" style="padding:12px"><div class="thumb"><svg><use href="#i-restaurant"/></svg></div><div style="flex:1"><div class="title">Cappuccino</div><div class="small muted">Bebidas calientes</div><div class="small muted">5 min</div></div><div class="price">$4500</div></div>
+          <div class="card row" style="padding:12px"><div class="thumb"><svg><use href="#i-restaurant"/></svg></div><div style="flex:1"><div class="title">Jugo de Mora</div><div class="small muted">Bebidas frías</div><div class="small muted">4 min</div></div><div class="price">$4000</div></div>
+          <div class="card row" style="padding:12px"><div class="thumb"><svg><use href="#i-restaurant"/></svg></div><div style="flex:1"><div class="title">Croissant</div><div class="small muted">Repostería</div><div class="small muted">2 min</div></div><div class="price">$3000</div></div>
+          <div class="card row" style="padding:12px"><div class="thumb"><svg><use href="#i-restaurant"/></svg></div><div style="flex:1"><div class="title">Combo Desayuno</div><div class="small muted">Combos</div><div class="small muted">8 min</div></div><div class="price">$9000</div></div>
+        </div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-02</span> Catálogo</figcaption>
+  </figure>
+
+  <!-- P-03 Detalle -->
+  <figure data-p="3">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="iconbtn"><svg><use href="#i-back"/></svg></span><h2>Detalle del producto</h2></div>
+      <div class="body" style="padding:6px 16px 0">
+        <div style="height:150px; border-radius:20px; background:var(--surface-high); display:grid; place-items:center; color:var(--primary)"><svg style="width:70px;height:70px"><use href="#i-restaurant"/></svg></div>
+        <div class="row between" style="margin-top:12px">
+          <div><div style="font-size:22px; font-weight:500">Cappuccino</div><div class="small muted">Bebidas calientes</div></div>
+          <div style="font-size:20px; font-weight:500">$4500</div>
+        </div>
+        <div class="title" style="font-size:15px; margin-top:10px">Tamaño</div>
+        <div class="radio"><i></i>Pequeño</div>
+        <div class="radio"><i></i>Mediano (+$1.000)</div>
+        <div class="radio on"><i></i>Grande (+$2.000)</div>
+        <div class="field" style="margin-top:10px; height:48px"><label>Tipo de leche</label><span style="flex:1">Deslactosada</span><svg><use href="#i-expand"/></svg></div>
+        <div class="check on" style="margin-top:6px"><i><svg><use href="#i-check"/></svg></i><div>Extra de café <span class="small muted">+$1.500</span></div></div>
+        <div class="check"><i></i><div>Canela <span class="small muted">+$500</span></div></div>
+        <div class="spacer"></div>
+        <div class="card row between" style="padding:12px 16px"><span>Precio total</span><span style="font-size:20px; font-weight:600">$8000</span></div>
+        <div class="btn" style="margin:12px 0 22px"><svg><use href="#i-add-cart"/></svg>Agregar al carrito</div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-03</span> Detalle y personalización</figcaption>
+  </figure>
+
+  <!-- P-04 Carrito -->
+  <figure data-p="4">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="iconbtn"><svg><use href="#i-back"/></svg></span><h2>Tu carrito</h2></div>
+      <div class="body" style="padding:0">
+        <div class="tile"><div style="flex:1"><div class="t">Cappuccino (Grande, deslactosada)</div><div class="s">Extra de café</div></div><div>$8000</div></div>
+        <div class="divider" style="margin:0 16px"></div>
+        <div class="tile"><div style="flex:1"><div class="t">Croissant</div></div><div>$3000</div></div>
+        <div class="spacer"></div>
+        <div style="padding:16px 16px 26px; display:flex; flex-direction:column; gap:14px">
+          <div class="btn outline"><svg><use href="#i-clock"/></svg>Recoger a las 10:15 a. m.</div>
+          <div class="row between"><span>Total</span><span style="font-size:22px; font-weight:500">$11000</span></div>
+          <div class="btn">Confirmar pedido</div>
+        </div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-04</span> Carrito y franja Pick &amp; Go</figcaption>
+  </figure>
+
+  <!-- P-05 Ticket digital -->
+  <figure data-p="5">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="iconbtn"><svg><use href="#i-back"/></svg></span><h2>Pedido confirmado</h2></div>
+      <div class="body" style="padding:12px 16px 0">
+        <div class="card" style="padding:24px 20px; text-align:center">
+          <svg style="width:60px;height:60px; color:var(--success)"><use href="#i-check-circle"/></svg>
+          <div style="font-size:17px; font-weight:500; margin-top:10px">¡Tu pedido quedó confirmado!</div>
+          <div class="muted" style="margin-top:22px">Claim ID</div>
+          <div style="font-size:38px; font-weight:700; letter-spacing:2px; color:var(--primary); margin-top:4px">EB-102</div>
+          <div style="margin-top:20px">Recogida: 10:15 a. m.</div>
+          <div style="margin-top:6px">Total: $11000</div>
+          <div style="margin-top:10px"><span class="estado prep">En preparación</span></div>
+          <div class="small muted" style="margin-top:16px">Muestra este Claim ID en el mostrador para recibir tu pedido.</div>
+        </div>
+        <div class="spacer"></div>
+        <div class="btn" style="margin-bottom:26px">Volver al catálogo</div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-05</span> Ticket digital</figcaption>
+  </figure>
+
+  <!-- P-06 Ticket offline -->
+  <figure data-p="6">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi-off"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="iconbtn"><svg><use href="#i-back"/></svg></span><h2>Ticket activo</h2></div>
+      <div class="body" style="padding:12px 16px 0">
+        <div class="row" style="background:var(--surface-high); border-radius:10px; padding:10px 14px; gap:10px; font-size:13px">
+          <svg style="width:18px;height:18px"><use href="#i-wifi-off"/></svg>Sin conexión · datos guardados en el teléfono
+        </div>
+        <div class="card" style="padding:24px 20px; text-align:center; margin-top:14px">
+          <svg style="width:52px;height:52px; color:var(--text-muted)"><use href="#i-wifi-off"/></svg>
+          <div style="margin-top:8px">Modo sin conexión</div>
+          <div class="muted" style="margin-top:20px">Claim ID</div>
+          <div style="font-size:38px; font-weight:700; letter-spacing:2px; color:var(--primary); margin-top:4px">EB-102</div>
+          <div style="margin-top:18px">Recogida: 10:15 a. m.</div>
+          <div style="margin-top:10px">Estado: <span class="estado prep">En preparación</span></div>
+        </div>
+        <div class="spacer"></div>
+        <div class="btn" style="margin-bottom:26px">Volver</div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-06</span> Ticket activo offline</figcaption>
+  </figure>
+
+  <!-- P-07 Perfil -->
+  <figure data-p="7">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="iconbtn"><svg><use href="#i-back"/></svg></span><h2>Mi perfil</h2></div>
+      <div class="body" style="padding:20px 24px 0">
+        <div style="width:88px; height:88px; border-radius:50%; background:var(--primary-container); color:var(--on-primary-container); display:grid; place-items:center; margin:0 auto"><svg style="width:48px;height:48px"><use href="#i-person"/></svg></div>
+        <div class="card" style="margin-top:24px">
+          <div class="tile"><svg><use href="#i-email"/></svg><div><div class="t">Correo electrónico</div><div class="s">sara@correo.iue.edu.co</div></div></div>
+          <div class="divider"></div>
+          <div class="tile"><svg><use href="#i-lock"/></svg><div style="flex:1"><div class="t">Contraseña</div><div class="s" style="letter-spacing:2px">••••••••</div></div><svg style="color:var(--text)"><use href="#i-eye"/></svg></div>
+        </div>
+        <div class="btn" style="margin-top:24px"><svg><use href="#i-history"/></svg>Pedidos recientes</div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-07</span> Perfil</figcaption>
+  </figure>
+
+  <!-- P-08 Historial -->
+  <figure data-p="8">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="iconbtn"><svg><use href="#i-back"/></svg></span><h2>Pedidos recientes</h2></div>
+      <div class="body" style="padding:6px 12px 0; gap:10px">
+        <div class="card" style="padding:14px 16px">
+          <div class="row between"><span class="title">EB-102</span><span class="estado prep">En preparación</span></div>
+          <div class="small muted" style="margin-top:4px">25 sep 2026 · Recogida 10:15 a. m.</div>
+          <div class="row between" style="margin-top:8px"><span class="small">Cappuccino, Croissant</span><span class="price">$11000</span></div>
+        </div>
+        <div class="card" style="padding:14px 16px">
+          <div class="row between"><span class="title">EB-097</span><span class="estado ok">Entregado</span></div>
+          <div class="small muted" style="margin-top:4px">24 sep 2026 · Recogida 12:30 p. m.</div>
+          <div class="row between" style="margin-top:8px"><span class="small">Combo Desayuno</span><span class="price">$9000</span></div>
+        </div>
+        <div class="card" style="padding:14px 16px">
+          <div class="row between"><span class="title">EB-091</span><span class="estado ok">Entregado</span></div>
+          <div class="small muted" style="margin-top:4px">22 sep 2026 · Recogida 9:45 a. m.</div>
+          <div class="row between" style="margin-top:8px"><span class="small">Café Americano, Croissant</span><span class="price">$6500</span></div>
+        </div>
+        <div class="card" style="padding:14px 16px">
+          <div class="row between"><span class="title">EB-084</span><span class="estado no">No reclamado</span></div>
+          <div class="small muted" style="margin-top:4px">19 sep 2026 · Recogida 1:00 p. m.</div>
+          <div class="row between" style="margin-top:8px"><span class="small">Jugo de Mora</span><span class="price">$4000</span></div>
+        </div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-08</span> Historial de pedidos</figcaption>
+  </figure>
+
+  <!-- P-09 Pedidos personal -->
+  <figure data-p="9">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span class="ic"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><h2>Pedidos entrantes</h2></div>
+      <div class="body" style="padding:6px 12px 0; gap:10px">
+        <div class="card row" style="padding:14px 12px 14px 16px"><svg style="width:24px;height:24px;color:var(--text-muted)"><use href="#i-receipt"/></svg><div style="flex:1"><div class="t" style="font-size:15px">Cappuccino (Grande)</div><div class="small muted">Claim ID: EB-101 · Recogida: 10:15 a. m.</div></div><span class="btn outline" style="height:36px; padding:0 14px; font-size:14px">Validar</span></div>
+        <div class="card row" style="padding:14px 12px 14px 16px"><svg style="width:24px;height:24px;color:var(--text-muted)"><use href="#i-receipt"/></svg><div style="flex:1"><div class="t" style="font-size:15px">Croissant</div><div class="small muted">Claim ID: EB-102 · Recogida: 10:20 a. m.</div></div><span class="btn outline" style="height:36px; padding:0 14px; font-size:14px">Validar</span></div>
+        <div class="card row" style="padding:14px 12px 14px 16px"><svg style="width:24px;height:24px;color:var(--text-muted)"><use href="#i-receipt"/></svg><div style="flex:1"><div class="t" style="font-size:15px">Combo Desayuno</div><div class="small muted">Claim ID: EB-103 · Recogida: 10:30 a. m.</div></div><span class="btn outline" style="height:36px; padding:0 14px; font-size:14px">Validar</span></div>
+      </div>
+      <div class="nav-hint"></div>
+    </div></div>
+    <figcaption><span>P-09</span> Pedidos entrantes (personal de barra)</figcaption>
+  </figure>
+
+</main>
+
+<script>
+  const p = new URLSearchParams(location.search).get('p');
+  if (p) {
+    document.body.classList.add('single');
+    const fig = document.querySelector('figure[data-p="' + p + '"]');
+    if (fig) fig.classList.add('show');
+  }
+</script>
+</body>
+</html>
