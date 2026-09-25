@@ -33,7 +33,12 @@ class _PantallaLoginState extends State<PantallaLogin> {
     if (_rolSeleccionado == RolUsuario.cliente) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const PantallaCatalogo()),
+        MaterialPageRoute(
+          builder: (context) => PantallaCatalogo(
+            correo: _correoController.text.trim(),
+            contrasena: _contrasenaController.text,
+          ),
+        ),
       );
     } else {
       Navigator.pushReplacement(

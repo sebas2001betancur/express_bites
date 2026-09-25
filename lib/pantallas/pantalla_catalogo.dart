@@ -5,10 +5,18 @@ import '../models/producto.dart';
 import '../widgets/producto_card.dart';
 import 'detalle_producto.dart';
 import 'pantalla_carrito.dart';
+import 'perfil.dart';
 import 'ticket_offline.dart';
 
 class PantallaCatalogo extends StatefulWidget {
-  const PantallaCatalogo({super.key});
+  final String correo;
+  final String contrasena;
+
+  const PantallaCatalogo({
+    super.key,
+    required this.correo,
+    required this.contrasena,
+  });
 
   @override
   State<PantallaCatalogo> createState() => _PantallaCatalogoState();
@@ -92,6 +100,21 @@ class _PantallaCatalogoState extends State<PantallaCatalogo> {
                   ),
                 ),
             ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.person),
+            tooltip: 'Mi perfil',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PantallaPerfil(
+                    correo: widget.correo,
+                    contrasena: widget.contrasena,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
