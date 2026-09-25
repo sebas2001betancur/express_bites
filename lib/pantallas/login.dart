@@ -95,8 +95,8 @@ class _PantallaLoginState extends State<PantallaLogin> {
                         if (value == null || value.trim().isEmpty) {
                           return 'Ingresa tu correo';
                         }
-                        if (!value.contains('@')) {
-                          return 'Ingresa un correo válido';
+                        if (!value.contains('@') || !value.contains('.')) {
+                          return 'El correo no tiene un formato válido';
                         }
                         return null;
                       },
@@ -114,8 +114,8 @@ class _PantallaLoginState extends State<PantallaLogin> {
                         if (value == null || value.isEmpty) {
                           return 'Ingresa tu contraseña';
                         }
-                        if (value.length < 4) {
-                          return 'Mínimo 4 caracteres';
+                        if (value.length < 6) {
+                          return 'La contraseña necesita al menos 6 caracteres';
                         }
                         return null;
                       },
