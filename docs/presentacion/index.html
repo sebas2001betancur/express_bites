@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExpressBites · Sustentación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #E65100;
+    --primary-soft: #FF8A50;
+    --primary-container: #FFDBCB;
+    --on-primary-container: #5A1B00;
+    --paper: #FBF7F4;
+    --card: #FFFFFF;
+    --sand: #F5EDE9;
+    --outline: #E4D3CA;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --success: #2E7D32;
+    --success-soft: #E3F1E4;
+    --warn: #9A5B00;
+    --warn-soft: #FFF0D6;
+    --backdrop: #17120F;
+    --code-bg: #1E1A17;
+    --code-ink: #F3E9E2;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "DM Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--backdrop);
+    color: var(--ink);
+    font-family: var(--sans);
+    overflow: hidden;
+  }
+
+  /* ---------- Escenario 16:9 que se escala a la pantalla ---------- */
+  #stage {
+    position: absolute; left: 50%; top: 50%;
+    width: 1280px; height: 720px;
+    transform-origin: center center;
+    background: var(--paper);
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.45);
+  }
+  .progress {
+    position: absolute; top: 0; left: 0; height: 5px; z-index: 5;
+    background: var(--primary); transition: width .35s ease;
+  }
+  .slide {
+    position: absolute; inset: 0;
+    padding: 52px 64px 70px;
+    display: flex; flex-direction: column;
+    opacity: 0; visibility: hidden;
+    transform: translateX(24px);
+    transition: opacity .35s ease, transform .35s ease, visibility 0s linear .35s;
+  }
+  .slide.active {
+    opacity: 1; visibility: visible; transform: none;
+    transition: opacity .35s ease, transform .35s ease, visibility 0s;
+  }
+  .slide.from-left { transform: translateX(-24px); }
+  @media (prefers-reduced-motion: reduce) {
+    .slide, .slide.active, .progress { transition: none; transform: none; }
+  }
+  .notes { display: none; }
+
+  footer.bar {
+    position: absolute; left: 64px; right: 64px; bottom: 22px; z-index: 4;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; color: var(--muted); letter-spacing: .02em;
+  }
+  footer.bar b { color: var(--ink); font-weight: 700; }
+  footer.bar .sec { display: inline-flex; align-items: center; gap: 8px; }
+  #stage.dark footer.bar { color: #9CA3AF; }
+  #stage.dark footer.bar b { color: #fff; }
+  footer.bar .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+
+  /* ---------- Tipografía ---------- */
+  .kicker {
+    font-size: 14px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--primary); margin-bottom: 10px;
+  }
+  h1, h2 { font-family: var(--serif); font-weight: 600; letter-spacing: -.01em; line-height: 1.08; }
+  h2 { font-size: 44px; margin-bottom: 26px; }
+  h2 em { font-style: normal; color: var(--primary); }
+  p, li { font-size: 21px; line-height: 1.45; }
+  .muted { color: var(--muted); }
+  code, .mono, pre, .tree { font-family: var(--mono); font-variant-ligatures: none; }
+  :not(pre) > code {
+    font-size: .86em; background: var(--sand); padding: 1px 6px; border-radius: 6px;
+    color: var(--on-primary-container);
+  }
+
+  /* ---------- Portada ---------- */
+  .cover { flex-direction: row; align-items: center; gap: 40px; padding-top: 40px; }
+  .cover .left { flex: 1; }
+  .cover h1 { font-size: 104px; line-height: .95; margin: 8px 0 20px; }
+  .cover h1 span { color: var(--primary); }
+  .cover .tagline { font-family: var(--serif); font-size: 32px; font-weight: 500; margin-bottom: 36px; }
+  .cover .team { list-style: none; display: grid; gap: 6px; }
+  .cover .team li { font-size: 20px; display: flex; align-items: center; gap: 10px; }
+  .cover .team li::before { content: ""; width: 18px; height: 3px; background: var(--primary); border-radius: 2px; }
+  .cover .meta { margin-top: 28px; font-size: 16px; color: var(--muted); }
+  .cover .phones { position: relative; width: 470px; height: 600px; flex-shrink: 0; }
+  .cover .phones::before {
+    content: ""; position: absolute; width: 440px; height: 440px; border-radius: 50%;
+    background: var(--primary-container); left: 20px; top: 80px;
+  }
+  .cover .phones img { border-radius: 11.6% / 5.5%; position: absolute; height: 520px; filter: drop-shadow(0 18px 28px rgba(60,20,0,.28)); }
+  .cover .phones img:nth-child(1) { left: 0; top: 50px; transform: rotate(-6deg); }
+  .cover .phones img:nth-child(2) { right: 0; top: 20px; transform: rotate(5deg); }
+
+  /* ---------- Problema ---------- */
+  .problem { display: grid; grid-template-columns: 1fr 1.25fr; gap: 44px; flex: 1; }
+  .clash { display: flex; flex-direction: column; gap: 14px; }
+  .stat { background: var(--card); border: 1px solid var(--outline); border-radius: 20px; padding: 20px 26px; }
+  .stat .num { font-family: var(--serif); font-size: 64px; font-weight: 700; line-height: 1; }
+  .stat .lbl { font-size: 19px; color: var(--muted); margin-top: 6px; }
+  .stat.hot { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .stat.hot .lbl { color: #FFE3D6; }
+  .clash .vs { font-family: var(--serif); font-size: 20px; color: var(--muted); padding-left: 26px; }
+  .who { list-style: none; display: grid; gap: 14px; }
+  .who li { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; font-size: 19px; }
+  .who li b { display: block; font-size: 20px; }
+  .who .ico {
+    width: 44px; height: 44px; border-radius: 12px; background: var(--primary-container);
+    display: grid; place-items: center; color: var(--primary);
+  }
+  .who .ico svg { width: 24px; height: 24px; }
+  .h3 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin-bottom: 14px; }
+  .why { margin-top: 22px; background: var(--sand); border-radius: 16px; padding: 16px 20px; }
+  .why ul { list-style: none; display: grid; gap: 6px; }
+  .why li { font-size: 18px; padding-left: 22px; position: relative; }
+  .why li::before { content: "→"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+  /* ---------- Objetivos ---------- */
+  .goal {
+    font-family: var(--serif); font-size: 30px; line-height: 1.3; font-weight: 500;
+    border-left: 6px solid var(--primary); padding: 4px 0 4px 24px; margin-bottom: 30px; max-width: 1050px;
+  }
+  .goal b { color: var(--primary); font-weight: 700; }
+  table.metrics { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--card);
+    border: 1px solid var(--outline); border-radius: 18px; overflow: hidden; }
+  table.metrics th, table.metrics td { text-align: left; padding: 16px 22px; font-size: 19px; vertical-align: top; }
+  table.metrics th { background: var(--sand); font-size: 15px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  table.metrics tr + tr td { border-top: 1px solid var(--outline); }
+  table.metrics td:first-child { font-weight: 700; width: 30%; }
+  table.metrics td.goalcell { color: var(--success); font-weight: 700; }
+
+  /* ---------- Alcance ---------- */
+  .scope { display: grid; grid-template-columns: 1.55fr 1fr; gap: 26px; align-items: start; }
+  .box { background: var(--card); border: 1px solid var(--outline); border-radius: 20px; padding: 22px 26px; }
+  .box.out { background: var(--sand); border-style: dashed; }
+  .box h3 { font-size: 16px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+  .box.in h3 { color: var(--success); }
+  .box.out h3 { color: var(--muted); }
+  .box ul { list-style: none; display: grid; gap: 9px; }
+  .box li { font-size: 18.5px; line-height: 1.35; padding-left: 30px; position: relative; }
+  .box.in li::before { content: "✓"; position: absolute; left: 0; color: var(--success); font-weight: 700; }
+  .box.out li::before { content: "✕"; position: absolute; left: 2px; color: var(--muted); font-weight: 700; }
+
+  /* ---------- Mockup ---------- */
+  .journey { display: flex; justify-content: space-between; align-items: flex-start; flex: 1; margin-top: -6px; }
+  .journey figure { width: 232px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .journey img { border-radius: 11.6% / 5.5%; height: 410px; filter: drop-shadow(0 12px 18px rgba(60,20,0,.22)); }
+  .journey figcaption { margin-top: 12px; }
+  .journey figcaption b { display: block; font-size: 19px; }
+  .journey figcaption b span { color: var(--primary); margin-right: 6px; }
+  .journey figcaption small { display: block; font-size: 15px; line-height: 1.35; color: var(--muted); margin-top: 3px; }
+  .journey .arrow { align-self: center; margin-top: -90px; color: var(--primary); font-size: 30px; font-weight: 700; }
+  .staff { display: grid; grid-template-columns: 1fr auto; gap: 40px; flex: 1; align-items: start; }
+  .steps { list-style: none; counter-reset: s; display: grid; gap: 16px; margin-top: 4px; }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 14px; font-size: 20px; }
+  .steps li::before {
+    content: counter(s); width: 40px; height: 40px; border-radius: 50%;
+    background: var(--primary); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 18px;
+  }
+  .note-card { margin-top: 26px; background: var(--sand); border-radius: 16px; padding: 16px 20px; font-size: 17px; line-height: 1.45; }
+
+  /* ---------- Separador técnico ---------- */
+  .divider { background: var(--ink); color: #fff; justify-content: center; }
+  .divider .kicker { color: var(--primary-soft); }
+  .divider h2 { font-size: 72px; margin-bottom: 18px; }
+  .divider p { font-size: 24px; color: #CBD2DA; max-width: 900px; }
+  .demo-list { list-style: none; counter-reset: d; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, auto); grid-auto-flow: column; gap: 14px 40px; margin-top: 36px; }
+  .demo-list li { counter-increment: d; font-size: 19px; color: #E5E7EB; display: grid; grid-template-columns: 34px 1fr; gap: 12px; }
+  .demo-list li::before {
+    content: counter(d); width: 34px; height: 34px; border-radius: 10px; border: 2px solid var(--primary-soft);
+    color: var(--primary-soft); display: grid; place-items: center; font-weight: 700; font-size: 16px;
+  }
+  .demo-list li b { color: #fff; }
+
+  /* ---------- Diagramas ---------- */
+  svg.diagram { width: 100%; height: auto; display: block; }
+  svg.diagram text { font-family: var(--sans); }
+  .legend { display: flex; gap: 28px; flex-wrap: wrap; font-size: 15px; color: var(--muted); margin-top: 14px; }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { display: inline-block; width: 22px; height: 14px; border-radius: 4px; }
+
+  /* ---------- Requerimientos ---------- */
+  .reqs { display: grid; grid-template-columns: 1.35fr 1fr; gap: 26px; align-items: start; }
+  .req-list { list-style: none; display: grid; gap: 7px; }
+  .req-list li { padding-left: 0; display: grid; grid-template-columns: 62px 1fr auto; gap: 10px; align-items: center; font-size: 17px; line-height: 1.3; }
+  .req-list .id { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--primary); }
+  .badge { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; letter-spacing: .03em; }
+  .badge.ok { background: var(--success-soft); color: var(--success); }
+  .badge.part { background: var(--warn-soft); color: var(--warn); }
+  .rnf li { grid-template-columns: 1fr; }
+  .rules { margin-top: 14px; font-size: 15px; color: var(--muted); line-height: 1.5; }
+  .rules b { color: var(--ink); }
+
+  /* ---------- Código ---------- */
+  .code-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .pane { background: var(--code-bg); border-radius: 16px; overflow: hidden; }
+  .pane .file {
+    font-family: var(--mono); font-size: 13px; color: #B8A99F; padding: 9px 18px;
+    background: #2A2420; display: flex; justify-content: space-between;
+  }
+  .pane .file b { color: var(--primary-soft); font-weight: 600; }
+  .pane pre { margin: 0; padding: 14px 18px; font-family: var(--mono); font-size: 13px; line-height: 1.5; color: var(--code-ink); white-space: pre; }
+  .kw { color: #FF9E6B; }
+  .ty { color: #7DD3C0; }
+  .st { color: #E8D27A; }
+  .fn { color: #9CC4FF; }
+  .cm { color: #8C7E75; font-style: italic; }
+  .hl { background: rgba(230,81,0,.32); border-radius: 4px; box-shadow: 0 0 0 2px rgba(230,81,0,.32); }
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 20px; }
+  .flow div { background: var(--card); border: 1px solid var(--outline); border-radius: 14px; padding: 12px 14px; font-size: 15px; line-height: 1.4; }
+  .flow div b { display: block; color: var(--primary); font-family: var(--serif); font-size: 22px; line-height: 1; margin-bottom: 6px; }
+  .code-table { display: grid; grid-template-columns: 560px 1fr; gap: 24px; align-items: start; }
+  .code-table .stack { display: grid; gap: 14px; align-content: start; }
+  table.travel { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 15px; background: var(--card);
+    border: 1px solid var(--outline); border-radius: 14px; overflow: hidden; }
+  table.travel th { background: var(--sand); text-align: left; padding: 9px 12px; font-size: 12.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+  table.travel td { padding: 9px 12px; vertical-align: top; line-height: 1.35; }
+  table.travel tr + tr td { border-top: 1px solid var(--outline); }
+  table.travel td:first-child { font-weight: 700; white-space: nowrap; }
+  table.travel code { font-size: 12.5px; }
+
+  /* ---------- Repositorio ---------- */
+  .repo { display: grid; grid-template-columns: 1.15fr 1fr; gap: 30px; align-items: start; }
+  .tree { background: var(--code-bg); color: var(--code-ink); border-radius: 18px; padding: 22px 26px; font-family: var(--mono); font-size: 15px; line-height: 1.62; white-space: pre; }
+  .tree .d { color: var(--primary-soft); font-weight: 600; }
+  .tree .c { color: #8C7E75; }
+  .branches { list-style: none; display: grid; gap: 8px; margin-top: 4px; }
+  .branches li { font-size: 16px; display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: center; }
+  .branches .pr { font-family: var(--mono); font-size: 13px; font-weight: 600; background: var(--primary-container); color: var(--on-primary-container); border-radius: 8px; text-align: center; padding: 3px 0; }
+  .branches code { font-size: 14px; }
+
+  /* ---------- Decisiones ---------- */
+  .decisions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; flex: 1; align-content: start; }
+  .dec { background: var(--card); border: 1px solid var(--outline); border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .dec .n { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--primary); }
+  .dec h4 { font-family: var(--serif); font-size: 21px; font-weight: 600; line-height: 1.2; }
+  .dec p { font-size: 15.5px; line-height: 1.42; color: var(--muted); }
+  .dec p b { color: var(--ink); }
+
+  /* ---------- Cierre ---------- */
+  .closing { justify-content: center; align-items: flex-start; }
+  .closing h2 { font-size: 110px; margin-bottom: 10px; }
+  .closing .sub { font-size: 26px; color: var(--muted); margin-bottom: 40px; }
+  .closing .row { display: flex; gap: 60px; }
+  .closing .row div { font-size: 19px; line-height: 1.6; }
+  .closing .row b { display: block; font-size: 14px; text-transform: uppercase; letter-spacing: .12em; color: var(--primary); margin-bottom: 4px; }
+
+  /* ---------- Controles fuera del escenario ---------- */
+  #hint {
+    position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+    background: rgba(31,41,55,.92); color: #fff; font-size: 14px; padding: 10px 16px; border-radius: 999px;
+    transition: opacity .6s ease; pointer-events: none; z-index: 20; white-space: nowrap;
+  }
+  #hint kbd { font-family: var(--mono); background: rgba(255,255,255,.16); border-radius: 5px; padding: 1px 6px; margin: 0 2px; }
+  #notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 30vh; z-index: 10;
+    background: #221C18; color: #F3E9E2; border-top: 3px solid var(--primary);
+    padding: 16px 28px; display: none; grid-template-columns: 1fr 200px; gap: 24px;
+  }
+  body.notes-open #notes-panel { display: grid; }
+  #notes-text { font-size: 18px; line-height: 1.55; overflow: auto; }
+  #notes-text p { font-size: 18px; margin-bottom: 8px; }
+  #notes-side { text-align: right; font-size: 14px; color: #B8A99F; }
+  #timer { font-family: var(--mono); font-size: 40px; color: #fff; }
+  #timer.over { color: var(--primary-soft); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="progress" id="progress"></div>
+
+  <!-- ============ 1. PORTADA ============ -->
+  <section class="slide cover" data-section="Parte no técnica">
+    <div class="left">
+      <div class="kicker">Sustentación · Programación Móvil</div>
+      <h1>Express<span>Bites</span></h1>
+      <p class="tagline">Pide antes. Recoge sin fila.</p>
+      <ul class="team">
+        <li>Sebastian Santiago Betancur Alvarez</li>
+        <li>Esteban Ramirez</li>
+        <li>Sara Betancur</li>
+      </ul>
+      <p class="meta">App móvil en Flutter para pedir comida anticipada en las cafeterías del campus</p>
+    </div>
+    <div class="phones">
+      <img src="../mockup/p02-catalogo.png" alt="Pantalla de catálogo de ExpressBites">
+      <img src="../mockup/p05-ticket-digital.png" alt="Pantalla de ticket digital de ExpressBites">
+    </div>
+    <aside class="notes">
+      <p>Presentarse los tres. Frase de entrada: "ExpressBites es una app para pedir la comida antes de llegar a la cafetería y recogerla sin hacer fila".</p>
+      <p>Parte no técnica: 5 minutos en total (diapositivas 1 a 7).</p>
+    </aside>
+  </section>
+
+  <!-- ============ 2. PROBLEMA ============ -->
+  <section class="slide" data-section="Parte no técnica">
+    <div class="kicker">El problema</div>
+    <h2>El descanso se va <em>en la fila</em></h2>
+    <div class="problem">
+      <div class="clash">
+        <div class="stat hot">
+          <div class="num">15–20 min</div>
+          <div class="lbl">de fila para pedir y esperar en hora pico (8–11 a. m. y 12–2 p. m.)</div>
+        </div>
+        <div class="vs">…pero un descanso dura</div>
+        <div class="stat">
+          <div class="num">15–30 min</div>
+          <div class="lbl">entre clases o actividades laborales</div>
+        </div>
+      </div>
+      <div>
+        <div class="h3">¿A quién le afecta?</div>
+        <ul class="who">
+          <li>
+            <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
+            <div><b>Estudiantes, docentes y oficinistas</b>Pierden el descanso, llegan tarde o terminan comprando ultraprocesados.</div>
+          </li>
+          <li>
+            <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm0-5H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2z"/></svg></span>
+            <div><b>Personal de barra y cocina</b>Estrés en horas pico y errores al tomar pedidos personalizados de viva voz.</div>
+          </li>
+          <li>
+            <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg></span>
+            <div><b>La administración</b>Pierde ventas de quienes ven la fila y se van, y no puede prever la demanda.</div>
+          </li>
+        </ul>
+        <div class="why">
+          <div class="h3" style="font-size:20px;margin-bottom:8px">¿Por qué una app móvil?</div>
+          <ul>
+            <li>El celular siempre está a mano: se pide desde el salón o la oficina.</li>
+            <li>El ticket va en el bolsillo y se puede mostrar incluso sin datos.</li>
+            <li>La personalización queda por escrito, sin malentendidos en caja.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>Contar la escena: tienes 20 minutos de descanso y la fila de la cafetería tarda 15–20. Pierdes el descanso o no comes bien.</p>
+      <p>No solo sufre el cliente: el personal se estresa y se equivoca con pedidos personalizados, y la cafetería pierde ventas.</p>
+      <p>Cerrar con "por qué móvil": el celular siempre va con la persona.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 3. OBJETIVOS ============ -->
+  <section class="slide" data-section="Parte no técnica">
+    <div class="kicker">Los objetivos</div>
+    <h2>Qué queremos lograr</h2>
+    <p class="goal">Que un cliente haga su pedido en <b>menos de 2 minutos</b> desde el celular y lo reciba en el mostrador en <b>menos de 1 minuto</b>.</p>
+    <div class="h3">¿Cómo sabremos que se logró?</div>
+    <table class="metrics">
+      <thead><tr><th>Métrica</th><th>Hoy</th><th>Con ExpressBites</th></tr></thead>
+      <tbody>
+        <tr><td>Tiempo total de pedido y recogida</td><td>15 a 20 minutos entre fila y espera</td><td class="goalcell">&lt; 2 min en la app + &lt; 1 min en el mostrador</td></tr>
+        <tr><td>Errores en pedidos personalizados</td><td>Altos: ruido, prisa y pedidos de viva voz</td><td class="goalcell">Bajos: la app deja todo por escrito</td></tr>
+        <tr><td>Previsibilidad del descanso</td><td>Ninguna: depende de lo larga que esté la fila</td><td class="goalcell">99 %: el cliente elige su hora de recogida</td></tr>
+      </tbody>
+    </table>
+    <aside class="notes">
+      <p>El objetivo en una frase: pedir en menos de 2 minutos y recoger en menos de 1.</p>
+      <p>La tabla responde "cómo sabremos que se logró": comparamos tiempo, errores y previsibilidad antes y después.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 4. ALCANCE ============ -->
+  <section class="slide" data-section="Parte no técnica">
+    <div class="kicker">El alcance</div>
+    <h2>Qué incluye y qué <em>no</em></h2>
+    <div class="scope">
+      <div class="box in">
+        <h3>Incluye</h3>
+        <ul>
+          <li>Inicio de sesión con correo, contraseña y rol: cliente o personal de barra</li>
+          <li>Catálogo por categorías: bebidas, repostería, combos</li>
+          <li>Personalizar el producto (tamaño, leche, extras, notas) viendo el precio al instante</li>
+          <li>Carrito con total y hora de recogida <i>Pick &amp; Go</i></li>
+          <li>Ticket digital con código único de reclamo (Claim ID)</li>
+          <li>Ticket activo disponible sin conexión a internet</li>
+          <li>Perfil del cliente con historial de pedidos</li>
+          <li>Vista del personal con los pedidos ordenados por hora de recogida</li>
+        </ul>
+      </div>
+      <div class="box out">
+        <h3>No incluye</h3>
+        <ul>
+          <li>Pagos con dinero real (PSE, tarjetas): el pago es en el mostrador</li>
+          <li>Domicilios o seguimiento de repartidores</li>
+          <li>Chat en vivo con la cocina</li>
+          <li>Panel web de administración e inventarios</li>
+          <li>Versión para iPhone: solo Android</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>Recalcar que es un modelo Pick &amp; Go: el cliente va a recoger, no hay domicilios.</p>
+      <p>El pago es simulado / presencial contra el ticket. No se integra pasarela.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 5. MOCKUP CLIENTE 1 ============ -->
+  <section class="slide" data-section="Parte no técnica">
+    <div class="kicker">El mockup · Rol cliente (1 de 2)</div>
+    <h2>Del inicio de sesión al carrito</h2>
+    <div class="journey">
+      <figure>
+        <img src="../mockup/p01-login.png" alt="Mockup de login">
+        <figcaption><b><span>1</span>Login</b><small>Correo, contraseña y rol con el que entra</small></figcaption>
+      </figure>
+      <div class="arrow">›</div>
+      <figure>
+        <img src="../mockup/p02-catalogo.png" alt="Mockup de catálogo">
+        <figcaption><b><span>2</span>Catálogo</b><small>Filtra por categoría y ve precio y tiempo de preparación</small></figcaption>
+      </figure>
+      <div class="arrow">›</div>
+      <figure>
+        <img src="../mockup/p03-detalle-producto.png" alt="Mockup de detalle de producto">
+        <figcaption><b><span>3</span>Detalle</b><small>Elige tamaño, leche y extras; el precio cambia al momento</small></figcaption>
+      </figure>
+      <div class="arrow">›</div>
+      <figure>
+        <img src="../mockup/p04-carrito.png" alt="Mockup de carrito">
+        <figcaption><b><span>4</span>Carrito</b><small>Revisa el total y elige a qué hora recoge</small></figcaption>
+      </figure>
+    </div>
+    <aside class="notes">
+      <p>Recorrer como si fuéramos una estudiante con 20 minutos: entra, filtra "Bebidas calientes", pide un cappuccino grande con canela, va al carrito y elige la hora.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 6. MOCKUP CLIENTE 2 ============ -->
+  <section class="slide" data-section="Parte no técnica">
+    <div class="kicker">El mockup · Rol cliente (2 de 2)</div>
+    <h2>El ticket y la cuenta del cliente</h2>
+    <div class="journey">
+      <figure>
+        <img src="../mockup/p05-ticket-digital.png" alt="Mockup de ticket digital">
+        <figcaption><b><span>5</span>Ticket digital</b><small>Claim ID grande, hora de recogida y total</small></figcaption>
+      </figure>
+      <div class="arrow">›</div>
+      <figure>
+        <img src="../mockup/p06-ticket-offline.png" alt="Mockup de ticket sin conexión">
+        <figcaption><b><span>6</span>Ticket sin conexión</b><small>Se muestra en la barra aunque no haya datos</small></figcaption>
+      </figure>
+      <div class="arrow">›</div>
+      <figure>
+        <img src="../mockup/p07-perfil.png" alt="Mockup de perfil">
+        <figcaption><b><span>7</span>Perfil</b><small>Datos de la cuenta y acceso a pedidos recientes</small></figcaption>
+      </figure>
+      <div class="arrow">›</div>
+      <figure>
+        <img src="../mockup/p08-historial-pedidos.png" alt="Mockup de historial de pedidos">
+        <figcaption><b><span>8</span>Historial</b><small>Pedidos anteriores del más reciente al más antiguo</small></figcaption>
+      </figure>
+    </div>
+    <aside class="notes">
+      <p>El ticket es el "comprobante": con el Claim ID el personal sabe cuál pedido entregar.</p>
+      <p>Destacar que el ticket se puede abrir sin internet: en el campus la señal falla.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 7. MOCKUP PERSONAL ============ -->
+  <section class="slide" data-section="Parte no técnica">
+    <div class="kicker">El mockup · Rol personal de barra</div>
+    <h2>Del otro lado del mostrador</h2>
+    <div class="staff">
+      <div>
+        <ol class="steps">
+          <li><span>Entra con el rol <b>Personal de barra</b> desde el mismo login.</span></li>
+          <li><span>Ve los pedidos entrantes ordenados por hora de recogida: sabe qué preparar primero.</span></li>
+          <li><span>Cuando llega el cliente, compara el Claim ID de su ticket.</span></li>
+          <li><span>Marca el pedido como entregado y no se puede reclamar dos veces.</span></li>
+        </ol>
+        <p class="note-card">Con esto la cocina recibe los pedidos <b>antes</b> de que llegue la persona, y la entrega en barra toma segundos.</p>
+      </div>
+      <div class="journey" style="gap:34px;flex:none">
+        <figure>
+          <img src="../mockup/p01-login.png" alt="Mockup de login">
+          <figcaption><b><span>1</span>Login</b><small>Rol: personal de barra</small></figcaption>
+        </figure>
+        <figure>
+          <img src="../mockup/p09-pedidos-personal.png" alt="Mockup de pedidos entrantes del personal">
+          <figcaption><b><span>9</span>Pedidos entrantes</b><small>Validar y entregar</small></figcaption>
+        </figure>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>Cierre de la parte no técnica (~5 min). Transición: "Ahora les mostramos cómo funciona por dentro".</p>
+    </aside>
+  </section>
+
+  <!-- ============ 8. MAPA DE NAVEGACIÓN ============ -->
+  <section class="slide" data-section="Parte técnica">
+    <div class="kicker">Parte técnica · Navegación</div>
+    <h2>Mapa de navegación</h2>
+    <svg class="diagram" viewBox="0 0 1180 440" role="img" aria-label="Mapa de navegación entre las pantallas de ExpressBites">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#E65100"/>
+        </marker>
+        <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#9CA3AF"/>
+        </marker>
+      </defs>
+      <g fill="none" stroke="#E65100" stroke-width="2.5">
+        <path d="M190,240 H245 V200 H296" marker-end="url(#arr)"/>
+        <path d="M245,240 V400 H296" marker-end="url(#arr)"/>
+        <path d="M500,200 H560"/>
+        <path d="M560,52 V382"/>
+        <path d="M560,52 H616" marker-end="url(#arr)"/>
+        <path d="M560,162 H616" marker-end="url(#arr)"/>
+        <path d="M560,272 H616" marker-end="url(#arr)"/>
+        <path d="M560,382 H616" marker-end="url(#arr)"/>
+        <path d="M880,162 H946" marker-end="url(#arr)"/>
+      </g>
+      <path d="M880,382 H946" fill="none" stroke="#9CA3AF" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrg)"/>
+      <g font-size="13" font-weight="700" fill="#E65100" text-anchor="end">
+        <text x="238" y="222">Cliente</text>
+        <text x="238" y="330">Personal</text>
+      </g>
+
+      <g font-size="17" font-weight="700" fill="#1F2937" text-anchor="middle">
+        <!-- Login -->
+        <rect x="10" y="208" width="180" height="64" rx="14" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+        <text x="100" y="236">Login</text>
+        <text x="100" y="257" font-size="12.5" font-weight="400" fill="#6B7280">correo, contraseña y rol</text>
+        <!-- Catálogo -->
+        <rect x="300" y="168" width="200" height="64" rx="14" fill="#FFDBCB" stroke="#E65100" stroke-width="2"/>
+        <text x="400" y="196">Catálogo</text>
+        <text x="400" y="217" font-size="12.5" font-weight="400" fill="#5A1B00">dueño del carrito (setState)</text>
+        <!-- Pedidos personal -->
+        <rect x="300" y="368" width="200" height="64" rx="14" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+        <text x="400" y="396">Pedidos entrantes</text>
+        <text x="400" y="417" font-size="12.5" font-weight="400" fill="#6B7280">validar y entregar</text>
+        <!-- Detalle -->
+        <rect x="620" y="20" width="260" height="64" rx="14" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+        <text x="750" y="48">Detalle del producto</text>
+        <text x="750" y="69" font-size="12.5" font-weight="400" fill="#6B7280">recibe Producto → devuelve personalizado</text>
+        <!-- Carrito -->
+        <rect x="620" y="130" width="260" height="64" rx="14" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+        <text x="750" y="158">Carrito</text>
+        <text x="750" y="179" font-size="12.5" font-weight="400" fill="#6B7280">recibe la lista → devuelve true</text>
+        <!-- Ticket activo -->
+        <rect x="620" y="240" width="260" height="64" rx="14" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+        <text x="750" y="268">Ticket activo (offline)</text>
+        <text x="750" y="289" font-size="12.5" font-weight="400" fill="#6B7280">recibe Claim ID y franja</text>
+        <!-- Perfil -->
+        <rect x="620" y="350" width="260" height="64" rx="14" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+        <text x="750" y="378">Perfil</text>
+        <text x="750" y="399" font-size="12.5" font-weight="400" fill="#6B7280">recibe correo y contraseña</text>
+        <!-- Ticket digital -->
+        <rect x="950" y="130" width="220" height="64" rx="14" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+        <text x="1060" y="158">Ticket digital</text>
+        <text x="1060" y="179" font-size="12.5" font-weight="400" fill="#6B7280">recibe Claim ID, franja y total</text>
+        <!-- Historial -->
+        <rect x="950" y="350" width="220" height="64" rx="14" fill="#F5EDE9" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="1060" y="378" fill="#6B7280">Historial</text>
+        <text x="1060" y="399" font-size="12.5" font-weight="400" fill="#6B7280">diseñado en el mockup</text>
+      </g>
+    </svg>
+    <div class="legend">
+      <span><i style="background:#E65100;height:3px"></i><code>Navigator.push</code> avanza · <code>Navigator.pop</code> regresa con el dato</span>
+      <span><i style="background:#FFDBCB;border:2px solid #E65100"></i>Pantalla que guarda el estado del carrito</span>
+      <span><i style="border:2px dashed #9CA3AF"></i>Pantalla aún no programada</span>
+    </div>
+    <aside class="notes">
+      <p>Parte técnica: 7 minutos (diapositivas 8 a 15).</p>
+      <p>Explicar: desde el login se usa <code>pushReplacement</code> según el rol, para que "atrás" no regrese al login. El catálogo es el centro: desde ahí se abre todo.</p>
+      <p>Cada caja dice qué dato recibe la pantalla y qué devuelve al cerrar.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 9. DEMO ============ -->
+  <section class="slide divider" data-section="Parte técnica">
+    <div class="kicker">Parte técnica · Demo en vivo</div>
+    <h2>Recorramos la app</h2>
+    <p>La app corriendo en el emulador, siguiendo el mapa de navegación completo.</p>
+    <ol class="demo-list">
+      <li><span><b>Login:</b> correo sin "@" → mensaje de error; luego entrar como cliente.</span></li>
+      <li><span><b>Catálogo:</b> filtrar por "Bebidas calientes" y volver a "Todas".</span></li>
+      <li><span><b>Detalle:</b> intentar agregar sin tamaño → aviso; elegir Grande + canela y ver el precio.</span></li>
+      <li><span><b>Carrito:</b> el badge muestra la cantidad; confirmar sin hora → aviso; elegir hora.</span></li>
+      <li><span><b>Ticket digital:</b> Claim ID y total; al volver, el carrito queda vacío.</span></li>
+      <li><span><b>Ticket activo y perfil:</b> vista offline y mostrar/ocultar contraseña.</span></li>
+      <li><span><b>Personal de barra:</b> reiniciar, entrar con ese rol y validar un pedido.</span></li>
+    </ol>
+    <aside class="notes">
+      <p>Tener el emulador abierto ANTES de empezar y la app ya compilada.</p>
+      <p>Para cambiar al rol de personal no hay "cerrar sesión": hacer hot restart (R mayúscula en la terminal de flutter run).</p>
+      <p>Al volver del ticket digital, el catálogo recibe <code>true</code> y vacía el carrito: mostrar el badge en cero.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 10. REQUERIMIENTOS ============ -->
+  <section class="slide" data-section="Parte técnica">
+    <div class="kicker">Parte técnica · Requerimientos</div>
+    <h2>Requerimientos principales</h2>
+    <div class="reqs">
+      <div class="box">
+        <h3 style="color:var(--ink)">Funcionales</h3>
+        <ul class="req-list">
+          <li><span class="id">RF-01</span><span>Login con validación de correo, contraseña y rol</span><span class="badge ok">Listo</span></li>
+          <li><span class="id">RF-02</span><span>Catálogo filtrado por categoría</span><span class="badge ok">Listo</span></li>
+          <li><span class="id">RF-03</span><span>Personalizar producto con precio en tiempo real</span><span class="badge ok">Listo</span></li>
+          <li><span class="id">RF-04</span><span>Carrito con total y hora de recogida</span><span class="badge part">Parcial</span></li>
+          <li><span class="id">RF-05</span><span>Ticket digital con Claim ID único</span><span class="badge ok">Listo</span></li>
+          <li><span class="id">RF-06</span><span>Ticket activo consultable sin conexión</span><span class="badge part">Parcial</span></li>
+          <li><span class="id">RF-07</span><span>Perfil e historial de pedidos</span><span class="badge part">Parcial</span></li>
+          <li><span class="id">RF-08</span><span>Pedidos entrantes y validación de entrega</span><span class="badge part">Parcial</span></li>
+        </ul>
+        <p class="rules"><b>Reglas de negocio ya en el código:</b> RN-01 el tamaño es obligatorio · RN-02 el precio se recalcula en cada cambio · RN-03 no se confirma con el carrito vacío.</p>
+      </div>
+      <div class="box">
+        <h3 style="color:var(--ink)">No funcionales</h3>
+        <ul class="req-list rnf">
+          <li><span><b>Plataforma:</b> Flutter y Dart, para Android</span></li>
+          <li><span><b>Rapidez:</b> pedido completo en menos de 2 minutos</span></li>
+          <li><span><b>Disponibilidad:</b> el ticket se puede ver sin internet</span></li>
+          <li><span><b>Legibilidad:</b> Claim ID en letra grande y alto contraste</span></li>
+          <li><span><b>Ergonomía:</b> botones principales al alcance del pulgar</span></li>
+          <li><span><b>Tema:</b> Material 3, claro y oscuro según el sistema</span></li>
+          <li><span><b>Seguridad del alcance:</b> sin pagos reales en esta etapa</span></li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>Lo "Parcial" es honesto: RF-04 aún no tiene los atajos "En 15/30 min" ni cantidades; RF-06 muestra la pantalla pero todavía no guarda el ticket en el dispositivo; RF-07 el historial está en el mockup; RF-08 usa pedidos de ejemplo.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 11. MODELO DE DATOS ============ -->
+  <section class="slide" data-section="Parte técnica">
+    <div class="kicker">Parte técnica · Modelo de datos</div>
+    <h2 style="margin-bottom:14px">Entidades y relaciones</h2>
+    <svg class="diagram" viewBox="0 0 1180 450" role="img" aria-label="Diagrama entidad relación de ExpressBites">
+      <g fill="none" stroke="#6B7280" stroke-width="2">
+        <path d="M240,94 H330"/>
+        <path d="M580,94 H680"/>
+        <path d="M920,94 H990"/>
+        <path d="M800,194 V260"/>
+        <path d="M920,300 H990"/>
+      </g>
+      <g font-size="13" font-weight="700" fill="#E65100">
+        <text x="248" y="86">1</text><text x="316" y="86">N</text>
+        <text x="588" y="86">1</text><text x="666" y="86">N</text>
+        <text x="928" y="86">N</text><text x="976" y="86">N</text>
+        <text x="808" y="212">N</text><text x="808" y="254">1</text>
+        <text x="928" y="292">N</text><text x="978" y="292">1</text>
+      </g>
+      <g font-size="12.5" fill="#6B7280" text-anchor="middle" font-style="italic">
+        <text x="285" y="114">hace</text>
+        <text x="630" y="114">contiene</text>
+        <text x="955" y="114">aplica</text>
+        <text x="840" y="236" text-anchor="start">es de</text>
+        <text x="955" y="320">pertenece</text>
+      </g>
+
+      <!-- Usuario: parcial -->
+      <rect x="20" y="30" width="220" height="128" rx="12" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+      <path d="M20,42 a12,12 0 0 1 12,-12 h196 a12,12 0 0 1 12,12 v28 h-220z" fill="#FFDBCB"/>
+      <text x="36" y="56" font-size="16" font-weight="700" fill="#5A1B00">Usuario</text>
+      <g font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#1F2937">
+        <text x="36" y="94">correo: String</text>
+        <text x="36" y="120">contrasena: String</text>
+        <text x="36" y="146">rol: RolUsuario</text>
+      </g>
+
+      <!-- Pedido: parcial -->
+      <rect x="330" y="30" width="250" height="154" rx="12" fill="#FFFFFF" stroke="#E4D3CA" stroke-width="1.5"/>
+      <path d="M330,42 a12,12 0 0 1 12,-12 h226 a12,12 0 0 1 12,12 v28 h-250z" fill="#FFDBCB"/>
+      <text x="346" y="56" font-size="16" font-weight="700" fill="#5A1B00">Pedido / Ticket</text>
+      <g font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#1F2937">
+        <text x="346" y="94">claimId: String</text>
+        <text x="346" y="120">franjaRecogida: String</text>
+        <text x="346" y="146">total: double</text>
+        <text x="346" y="172" fill="#6B7280">estado</text>
+      </g>
+
+      <!-- ItemPedido: alcance -->
+      <rect x="680" y="30" width="240" height="164" rx="12" fill="#FBF7F4" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <text x="696" y="56" font-size="16" font-weight="700" fill="#6B7280">ItemPedido</text>
+      <g font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#6B7280">
+        <text x="696" y="94">producto: Producto</text>
+        <text x="696" y="120">tamano / leche</text>
+        <text x="696" y="146">extras, notas</text>
+        <text x="696" y="172">precioFinal: double</text>
+      </g>
+
+      <!-- Variante: alcance -->
+      <rect x="990" y="30" width="180" height="128" rx="12" fill="#FBF7F4" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <text x="1006" y="56" font-size="16" font-weight="700" fill="#6B7280">Variante</text>
+      <g font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#6B7280">
+        <text x="1006" y="94">tipo</text>
+        <text x="1006" y="120">opcion</text>
+        <text x="1006" y="146">precioExtra</text>
+      </g>
+
+      <!-- Producto: implementado -->
+      <rect x="680" y="260" width="240" height="180" rx="12" fill="#FFFFFF" stroke="#E65100" stroke-width="2.5"/>
+      <path d="M680,272 a12,12 0 0 1 12,-12 h216 a12,12 0 0 1 12,12 v28 h-240z" fill="#E65100"/>
+      <text x="696" y="286" font-size="16" font-weight="700" fill="#FFFFFF">Producto</text>
+      <text x="904" y="286" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="end">en el código ✓</text>
+      <g font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#1F2937">
+        <text x="696" y="324">id: String</text>
+        <text x="696" y="350">nombre: String</text>
+        <text x="696" y="376">categoria: String</text>
+        <text x="696" y="402">precio: double</text>
+        <text x="696" y="428">minutosPreparacion: int</text>
+      </g>
+
+      <!-- Categoría: alcance -->
+      <rect x="990" y="260" width="180" height="76" rx="12" fill="#FBF7F4" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <text x="1006" y="286" font-size="16" font-weight="700" fill="#6B7280">Categoría</text>
+      <text x="1006" y="320" font-family="JetBrains Mono, Consolas, monospace" font-size="13" fill="#6B7280">nombre</text>
+    </svg>
+    <div class="legend" style="margin-top:6px">
+      <span><i style="background:#E65100"></i>Clase en el código (<code>Producto</code>, enum <code>RolUsuario</code>)</span>
+      <span><i style="background:#FFDBCB"></i>Hoy sus datos viajan como parámetros entre pantallas</span>
+      <span><i style="border:2px dashed #9CA3AF"></i>Definido en el alcance, siguiente etapa</span>
+    </div>
+    <div style="position:absolute;left:64px;top:410px;width:560px">
+      <p style="font-size:17px;line-height:1.5" class="muted">Hoy la categoría es un texto dentro de <code>Producto</code> y las variantes están fijas en la pantalla de detalle. El producto personalizado es un <b style="color:var(--ink)">Producto nuevo</b> con el nombre y el precio final: el carrito es una <code>List&lt;Producto&gt;</code>.</p>
+    </div>
+    <aside class="notes">
+      <p>Un usuario hace muchos pedidos; un pedido tiene muchos ítems; cada ítem es de un producto y puede tener variantes; cada producto pertenece a una categoría.</p>
+      <p>Ser claros con lo que existe hoy: solo <code>Producto</code> es clase, y <code>RolUsuario</code> es un enum en login.dart. Lo demás viaja como parámetros o está en el alcance.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 12. CÓDIGO 1 ============ -->
+  <section class="slide" data-section="Parte técnica">
+    <div class="kicker">Parte técnica · Código de navegación (1 de 2)</div>
+    <h2 style="font-size:38px;margin-bottom:18px">De la lista al detalle… y de vuelta con el dato</h2>
+    <div class="code-grid">
+      <div class="pane">
+        <div class="file"><b>lib/pantallas/pantalla_catalogo.dart</b><span>ida</span></div>
+<pre><code><span class="ty">Future</span>&lt;<span class="kw">void</span>&gt; <span class="fn">_abrirDetalle</span>(<span class="ty">Producto</span> producto) <span class="kw">async</span> {
+  <span class="kw">final</span> agregado = <span class="hl"><span class="kw">await</span> <span class="ty">Navigator</span>.<span class="fn">push</span>&lt;<span class="ty">Producto</span>&gt;(</span>
+    context,
+    <span class="ty">MaterialPageRoute</span>(
+      builder: (context) =&gt; <span class="hl"><span class="ty">DetalleProducto</span>(producto: producto)</span>,
+    ),
+  );
+  <span class="kw">if</span> (agregado != <span class="kw">null</span>) {
+    <span class="hl"><span class="fn">setState</span>(() =&gt; _carrito.<span class="fn">add</span>(agregado));</span>
+  }
+}</code></pre>
+      </div>
+      <div class="pane">
+        <div class="file"><b>lib/pantallas/detalle_producto.dart</b><span>vuelta</span></div>
+<pre><code><span class="kw">final</span> productoPersonalizado = <span class="ty">Producto</span>(
+  id: widget.producto.id,
+  nombre: <span class="st">'${widget.producto.nombre} ($_tamano…)'</span>,
+  categoria: widget.producto.categoria,
+  precio: <span class="hl">_precioFinal</span>,
+  minutosPreparacion:
+      widget.producto.minutosPreparacion,
+);
+
+<span class="hl"><span class="ty">Navigator</span>.<span class="fn">pop</span>(context, productoPersonalizado);</span></code></pre>
+      </div>
+    </div>
+    <div class="flow">
+      <div><b>1</b>Al tocar una tarjeta, <code>push&lt;Producto&gt;</code> abre el detalle y le pasa el producto por el constructor.</div>
+      <div><b>2</b>El detalle lo lee como <code>widget.producto</code> y recalcula <code>_precioFinal</code> con cada <code>setState</code>.</div>
+      <div><b>3</b><code>Navigator.pop</code> cierra la pantalla y devuelve el producto personalizado.</div>
+      <div><b>4</b>El <code>await</code> recibe el dato y <code>setState</code> lo agrega al carrito; el badge se actualiza.</div>
+    </div>
+    <aside class="notes">
+      <p>El tipo genérico <code>push&lt;Producto&gt;</code> hace que el valor devuelto por <code>pop</code> ya llegue tipado: el compilador revisa que sea un Producto.</p>
+      <p>Si el usuario sale con la flecha atrás, <code>agregado</code> es null y no se agrega nada.</p>
+      <p>El precio: base + 1.000 (mediano) o 2.000 (grande) + 1.500 (extra café) + 500 (canela).</p>
+    </aside>
+  </section>
+
+  <!-- ============ 13. CÓDIGO 2 ============ -->
+  <section class="slide" data-section="Parte técnica">
+    <div class="kicker">Parte técnica · Código de navegación (2 de 2)</div>
+    <h2 style="font-size:38px;margin-bottom:18px">Del carrito al ticket, y qué viaja en cada paso</h2>
+    <div class="code-table">
+      <div class="stack">
+        <div class="pane">
+          <div class="file"><b>pantalla_carrito.dart</b><span>_confirmarPedido()</span></div>
+<pre><code><span class="ty">Navigator</span>.<span class="fn">push</span>(
+  context,
+  <span class="ty">MaterialPageRoute</span>(
+    builder: (context) =&gt; <span class="hl"><span class="ty">TicketDigital</span>(</span>
+      claimId: claimId,
+      franjaRecogida: _horaRecogida!.<span class="fn">format</span>(context),
+      total: _total,
+    ),
+  ),
+).<span class="fn">then</span>((_) {
+  <span class="hl"><span class="ty">Navigator</span>.<span class="fn">pop</span>(context, <span class="kw">true</span>);</span>
+});</code></pre>
+        </div>
+        <div class="pane">
+          <div class="file"><b>pantalla_catalogo.dart</b><span>_abrirCarrito()</span></div>
+<pre><code><span class="kw">final</span> confirmado = <span class="kw">await</span> <span class="ty">Navigator</span>.<span class="fn">push</span>&lt;<span class="ty">bool</span>&gt;(…);
+<span class="kw">if</span> (confirmado == <span class="kw">true</span>) {
+  <span class="hl"><span class="fn">setState</span>(() =&gt; _carrito.<span class="fn">clear</span>());</span>
+}</code></pre>
+        </div>
+      </div>
+      <table class="travel">
+        <thead><tr><th>De → A</th><th>Qué viaja</th><th>Cómo</th></tr></thead>
+        <tbody>
+          <tr><td>Login → Catálogo</td><td>Correo y contraseña</td><td>Constructor con <code>pushReplacement</code></td></tr>
+          <tr><td>Catálogo → Detalle</td><td>El <code>Producto</code> tocado</td><td>Constructor</td></tr>
+          <tr><td>Detalle → Catálogo</td><td>El producto personalizado</td><td><code>pop(context, producto)</code></td></tr>
+          <tr><td>Catálogo → Carrito</td><td>La lista del carrito</td><td>Constructor</td></tr>
+          <tr><td>Carrito → Ticket</td><td>Claim ID, franja y total</td><td>Constructor</td></tr>
+          <tr><td>Carrito → Catálogo</td><td><code>true</code>: vaciar el carrito</td><td><code>pop(context, true)</code></td></tr>
+          <tr><td>Catálogo → Perfil</td><td>Correo y contraseña</td><td>Constructor</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <aside class="notes">
+      <p>Regla que seguimos: hacia adelante el dato va en el constructor; hacia atrás, como valor de retorno de <code>pop</code>.</p>
+      <p>Cuando el usuario cierra el ticket, el <code>.then</code> del carrito se ejecuta y hace <code>pop(context, true)</code>; el catálogo recibe ese true y vacía el carrito.</p>
+      <p>El login usa <code>pushReplacement</code> para que el botón atrás no vuelva al login.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 14. REPOSITORIO ============ -->
+  <section class="slide" data-section="Parte técnica">
+    <div class="kicker">Parte técnica · Repositorio</div>
+    <h2>Estructura del repositorio</h2>
+    <div class="repo">
+<div class="tree"><span class="d">express_bites/</span>
+├─ <span class="d">lib/</span>
+│  ├─ main.dart            <span class="c">MaterialApp y tema</span>
+│  ├─ <span class="d">models/</span>producto.dart  <span class="c">la entidad</span>
+│  ├─ <span class="d">data/</span>catalogo_datos.dart <span class="c">5 productos</span>
+│  ├─ <span class="d">pantallas/</span>           <span class="c">8 pantallas</span>
+│  │  ├─ login · pantalla_catalogo
+│  │  ├─ detalle_producto · pantalla_carrito
+│  │  ├─ ticket_digital · ticket_offline
+│  │  └─ perfil · pedidos_personal
+│  └─ <span class="d">widgets/</span>producto_card.dart
+├─ <span class="d">docs/</span>  alcance · definicion · mockup
+│        presentacion
+├─ <span class="d">test/</span>widget_test.dart
+└─ <span class="d">android/</span> …           <span class="c">plataforma objetivo</span></div>
+      <div>
+        <div class="h3">Una rama por funcionalidad → Pull Request</div>
+        <ul class="branches">
+          <li><span class="pr">#1</span><code>feature/alcance-proyecto</code></li>
+          <li><span class="pr">#3</span><code>feature/carrito</code></li>
+          <li><span class="pr">#4</span><code>feature/detalle_producto</code></li>
+          <li><span class="pr">#2</span><code>feature/pantallas-catalogo-carrito</code></li>
+          <li><span class="pr">#6</span><code>feature/mockup</code></li>
+          <li><span class="pr">#5</span><code>feature/perfil</code></li>
+        </ul>
+        <p class="note-card" style="margin-top:20px">Cada carpeta tiene un solo trabajo: <b>models</b> define los datos, <b>data</b> los provee, <b>pantallas</b> los muestra y <b>widgets</b> guarda las piezas reutilizables. Se quitaron las carpetas de macOS y Linux porque el objetivo es Android.</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>Los PR están en el orden en que se integraron a main. Nadie sube directo a main.</p>
+      <p><code>ProductoCard</code> se separó en widgets porque se repite por cada producto del catálogo.</p>
+    </aside>
+  </section>
+
+  <!-- ============ 15. DECISIONES ============ -->
+  <section class="slide" data-section="Parte técnica">
+    <div class="kicker">Parte técnica · Decisiones del equipo</div>
+    <h2>Qué decidimos y por qué</h2>
+    <div class="decisions">
+      <div class="dec"><span class="n">01</span><h4>Estado con <code>setState</code>, sin paquetes</h4><p><b>Por qué:</b> cada pantalla es dueña de sus datos y el flujo se lee en el código. El alcance deja Riverpod previsto para el carrito y el ticket.</p></div>
+      <div class="dec"><span class="n">02</span><h4><code>push</code> / <code>pop</code> con tipo, sin rutas con nombre</h4><p><b>Por qué:</b> <code>push&lt;Producto&gt;</code> y <code>push&lt;bool&gt;</code> hacen que el compilador revise el dato que regresa.</p></div>
+      <div class="dec"><span class="n">03</span><h4><code>pushReplacement</code> al iniciar sesión</h4><p><b>Por qué:</b> el botón atrás no debe devolver al login, y el rol decide la primera pantalla.</p></div>
+      <div class="dec"><span class="n">04</span><h4>Producto inmutable</h4><p><b>Por qué:</b> todos los campos son <code>final</code>. Personalizar crea un Producto nuevo con el precio final, así el carrito solo suma.</p></div>
+      <div class="dec"><span class="n">05</span><h4>Catálogo local de ejemplo</h4><p><b>Por qué:</b> permite probar y hacer la demo sin backend ni internet. El alcance prevé Firebase o una API REST.</p></div>
+      <div class="dec"><span class="n">06</span><h4>Material 3 con color semilla naranja</h4><p><b>Por qué:</b> la paleta terracota del diseño en un solo punto (<code>main.dart</code>), con modo claro y oscuro automático.</p></div>
+    </div>
+    <aside class="notes">
+      <p>Si preguntan por Riverpod: el alcance lo define como meta; en esta entrega usamos solo el SDK de Flutter (así lo documenta docs/definicion.md) para dominar primero la navegación y el paso de datos.</p>
+      <p>Después de esta diapositiva vienen las preguntas (3 minutos).</p>
+    </aside>
+  </section>
+
+  <!-- ============ 16. PREGUNTAS ============ -->
+  <section class="slide closing" data-section="Preguntas">
+    <div class="kicker">Gracias</div>
+    <h2>¿Preguntas?</h2>
+    <p class="sub">Pide antes. Recoge sin fila.</p>
+    <div class="row">
+      <div><b>Equipo</b>Sebastian Santiago Betancur Alvarez<br>Esteban Ramirez<br>Sara Betancur</div>
+      <div><b>Repositorio</b><span class="mono" style="font-size:17px">github.com/sebas2001betancur/express_bites</span></div>
+    </div>
+    <aside class="notes">
+      <p>El docente hace al menos una pregunta a cada integrante. Tener abierto VS Code con lib/pantallas por si piden ver código.</p>
+    </aside>
+  </section>
+
+  <footer class="bar">
+    <span class="sec"><span class="dot"></span><b>ExpressBites</b>&nbsp;·&nbsp;<span id="section-name"></span></span>
+    <span id="counter"></span>
+  </footer>
+</div>
+
+<div id="hint"><kbd>←</kbd><kbd>→</kbd> navegar · <kbd>F</kbd> pantalla completa · <kbd>N</kbd> notas y cronómetro</div>
+
+<div id="notes-panel" aria-live="polite">
+  <div id="notes-text"></div>
+  <div id="notes-side">
+    <div>Tiempo transcurrido</div>
+    <div id="timer">00:00</div>
+    <div>de 15:00 · <kbd>T</kbd> reinicia</div>
+    <div id="notes-count" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const stage = document.getElementById('stage');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  const sectionName = document.getElementById('section-name');
+  const notesText = document.getElementById('notes-text');
+  const notesCount = document.getElementById('notes-count');
+  const notesPanel = document.getElementById('notes-panel');
+  const timerEl = document.getElementById('timer');
+  const hint = document.getElementById('hint');
+  let current = 0;
+  let timerStart = null;
+
+  function fit() {
+    const notesH = document.body.classList.contains('notes-open') ? notesPanel.offsetHeight : 0;
+    const availH = window.innerHeight - notesH;
+    const scale = Math.min(window.innerWidth / 1280, availH / 720);
+    stage.style.top = (availH / 2) + 'px';
+    stage.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
+  }
+
+  function show(n) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    const back = n < current;
+    slides.forEach(function (s, idx) {
+      s.classList.toggle('active', idx === n);
+      s.classList.toggle('from-left', idx !== n && back);
+    });
+    current = n;
+    const s = slides[n];
+    stage.classList.toggle('dark', s.classList.contains('divider'));
+    sectionName.textContent = s.dataset.section || '';
+    counter.textContent = (n + 1) + ' / ' + slides.length;
+    progress.style.width = ((n + 1) / slides.length * 100) + '%';
+    const notes = s.querySelector('.notes');
+    notesText.innerHTML = notes ? notes.innerHTML : '<p>Sin notas.</p>';
+    notesCount.textContent = 'Diapositiva ' + (n + 1) + ' de ' + slides.length;
+    if (location.hash !== '#' + (n + 1)) history.replaceState(null, '', '#' + (n + 1));
+  }
+
+  function startTimer() { if (timerStart === null) timerStart = Date.now(); }
+  setInterval(function () {
+    if (timerStart === null) return;
+    const secs = Math.floor((Date.now() - timerStart) / 1000);
+    const mm = String(Math.floor(secs / 60)).padStart(2, '0');
+    const ss = String(secs % 60).padStart(2, '0');
+    timerEl.textContent = mm + ':' + ss;
+    timerEl.classList.toggle('over', secs >= 15 * 60);
+  }, 500);
+
+  function next() { startTimer(); show(current + 1); }
+  function prev() { startTimer(); show(current - 1); }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': case 'Enter':
+        e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace':
+        e.preventDefault(); prev(); break;
+      case 'Home': e.preventDefault(); show(0); break;
+      case 'End': e.preventDefault(); show(slides.length - 1); break;
+      case 'f': case 'F':
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {});
+        else document.exitFullscreen();
+        break;
+      case 'n': case 'N':
+        document.body.classList.toggle('notes-open'); fit(); break;
+      case 't': case 'T':
+        timerStart = Date.now(); timerEl.textContent = '00:00'; break;
+    }
+  });
+
+  // Clic: tercio izquierdo retrocede, el resto avanza
+  stage.addEventListener('click', function (e) {
+    if (e.target.closest('a')) return;
+    const r = stage.getBoundingClientRect();
+    if (e.clientX - r.left < r.width / 3) prev(); else next();
+  });
+
+  // Deslizar en pantallas táctiles
+  let touchX = null;
+  document.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); }
+    touchX = null;
+  });
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', function () {
+    const n = parseInt(location.hash.slice(1), 10);
+    if (!isNaN(n) && n - 1 !== current) show(n - 1);
+  });
+
+  const initial = parseInt(location.hash.slice(1), 10);
+  current = isNaN(initial) ? 0 : Math.max(0, Math.min(slides.length - 1, initial - 1));
+  show(current);
+  fit();
+  setTimeout(function () { hint.style.opacity = '0'; }, 4500);
+})();
+</script>
+</body>
+</html>
