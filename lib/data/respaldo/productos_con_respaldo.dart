@@ -1,6 +1,7 @@
 import 'package:express_bites/data/sqlite/sqlite_productos_repository.dart';
 import 'package:express_bites/domain/entities/catalogo.dart';
 import 'package:express_bites/domain/entities/producto.dart';
+import 'package:express_bites/domain/failures/falla.dart';
 import 'package:express_bites/domain/repositories/productos_repository.dart';
 
 class ProductosConRespaldo implements ProductosRepository {
@@ -18,7 +19,13 @@ class ProductosConRespaldo implements ProductosRepository {
           yield Catalogo(await _local.leer(), sinConexion: true);
         } else {
           // Solo se copia lo que viene del servidor.
-          if (!catalogo.sinConexion) await _local.guardarCopia(catalogo.productos);
+          if (!catalogo.sinConexion) {
+            try {
+              await _local.guardarCopia(catalogo.productos);
+            } on Falla {
+              // la copia local es best-effort
+            }
+          }
           yield catalogo;
         }
       }

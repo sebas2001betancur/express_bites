@@ -1,6 +1,7 @@
 import 'package:express_bites/data/sqlite/pedidos_local.dart';
 import 'package:express_bites/domain/entities/nuevo_pedido.dart';
 import 'package:express_bites/domain/entities/pedido.dart';
+import 'package:express_bites/domain/failures/falla.dart';
 import 'package:express_bites/domain/repositories/pedidos_repository.dart';
 
 class PedidosConRespaldo implements PedidosRepository {
@@ -15,7 +16,11 @@ class PedidosConRespaldo implements PedidosRepository {
   @override
   Future<Pedido> crear(String id, String uid, NuevoPedido nuevo) async {
     final pedido = await _nube.crear(id, uid, nuevo);
-    await _local.guardar(pedido); // el ticket queda en el teléfono (HU-04, HU-07)
+    try {
+      await _local.guardar(pedido); // el ticket queda en el teléfono (HU-04, HU-07)
+    } on Falla {
+      // best-effort: el pedido ya existe en la nube
+    }
     return pedido;
   }
 
@@ -28,7 +33,11 @@ class PedidosConRespaldo implements PedidosRepository {
         if (lista.isEmpty) {
           yield await _local.leerMios(uid);
         } else {
-          await _local.reemplazarMios(uid, lista);
+          try {
+            await _local.reemplazarMios(uid, lista);
+          } on Falla {
+            // la copia local es best-effort
+          }
           yield lista;
         }
       }
