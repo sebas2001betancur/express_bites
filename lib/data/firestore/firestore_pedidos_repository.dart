@@ -35,7 +35,7 @@ class FirestorePedidosRepository implements PedidosRepository {
   @override
   Stream<List<Pedido>> observarMios(String uid) => _coleccion
       .where('uid', isEqualTo: uid)
-      .snapshots()
+      .snapshots(includeMetadataChanges: true)
       .map((datos) => datos.docs.map(PedidoDto.desdeFirestore).toList()
         ..sort((a, b) => b.creado.compareTo(a.creado)));
 
@@ -45,7 +45,7 @@ class FirestorePedidosRepository implements PedidosRepository {
         EstadoPedido.enPreparacion.codigo,
         EstadoPedido.listo.codigo,
       ])
-      .snapshots()
+      .snapshots(includeMetadataChanges: true)
       .map((datos) => datos.docs.map(PedidoDto.desdeFirestore).toList()
         ..sort((a, b) => a.recogida.compareTo(b.recogida)));
 
