@@ -43,19 +43,34 @@ class PerfilPantalla extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.badge_outlined),
                     title: const Text('Tipo de cuenta'),
-                    subtitle: Text(usuario.rol == Rol.cliente ? 'Cliente' : 'Personal de barra'),
+                    subtitle: Text(
+                      usuario.rol == Rol.cliente
+                          ? 'Cliente'
+                          : 'Personal de barra',
+                    ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 24),
-            Text('Tema de la app', style: Theme.of(context).textTheme.titleSmall),
+            Text(
+              'Tema de la app',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
             const SizedBox(height: 8),
             SegmentedButton<ThemeMode>(
               segments: const [
-                ButtonSegment(value: ThemeMode.light, label: Text('Claro'), icon: Icon(Icons.light_mode)),
+                ButtonSegment(
+                  value: ThemeMode.light,
+                  label: Text('Claro'),
+                  icon: Icon(Icons.light_mode),
+                ),
                 ButtonSegment(value: ThemeMode.system, label: Text('Sistema')),
-                ButtonSegment(value: ThemeMode.dark, label: Text('Oscuro'), icon: Icon(Icons.dark_mode)),
+                ButtonSegment(
+                  value: ThemeMode.dark,
+                  label: Text('Oscuro'),
+                  icon: Icon(Icons.dark_mode),
+                ),
               ],
               selected: {tema.modo},
               onSelectionChanged: (s) => tema.cambiar(s.first),
@@ -65,7 +80,9 @@ class PerfilPantalla extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => HistorialPantalla(seguimiento: historial)),
+                  MaterialPageRoute(
+                    builder: (_) => HistorialPantalla(seguimiento: historial),
+                  ),
                 ),
                 icon: const Icon(Icons.history),
                 label: const Padding(

@@ -11,9 +11,9 @@ enum EstadoPedido {
   final String etiqueta;
 
   static EstadoPedido desdeCodigo(String codigo) => values.firstWhere(
-        (estado) => estado.codigo == codigo,
-        orElse: () => EstadoPedido.enPreparacion,
-      );
+    (estado) => estado.codigo == codigo,
+    orElse: () => EstadoPedido.enPreparacion,
+  );
 }
 
 /// RN-05: el Claim ID sale del id del documento (aleatorio de Firestore),
@@ -49,13 +49,13 @@ class Pedido {
   String get claimId => claimIdDe(id);
 
   Pedido conEstado(EstadoPedido nuevo) => Pedido(
-        id: id,
-        uid: uid,
-        items: items,
-        total: total,
-        recogida: recogida,
-        creado: creado,
-        estado: nuevo,
-        pendiente: pendiente,
-      );
+    id: id,
+    uid: uid,
+    items: items,
+    total: total,
+    recogida: recogida,
+    creado: creado,
+    estado: nuevo,
+    pendiente: pendiente,
+  );
 }

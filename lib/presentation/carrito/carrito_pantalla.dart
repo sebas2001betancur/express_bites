@@ -25,12 +25,14 @@ class CarritoPantalla extends StatelessWidget {
     final elegida = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(
-          DateTime.now().add(const Duration(minutes: 20))),
+        DateTime.now().add(const Duration(minutes: 20)),
+      ),
     );
     if (elegida == null) return;
     final hoy = DateTime.now();
     carrito.elegirHora(
-        DateTime(hoy.year, hoy.month, hoy.day, elegida.hour, elegida.minute));
+      DateTime(hoy.year, hoy.month, hoy.day, elegida.hour, elegida.minute),
+    );
   }
 
   Future<void> _confirmar(BuildContext context) async {
@@ -39,7 +41,8 @@ class CarritoPantalla extends StatelessWidget {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => TicketPantalla(inicial: pedido, seguimiento: seguimiento),
+        builder: (_) =>
+            TicketPantalla(inicial: pedido, seguimiento: seguimiento),
       ),
     );
   }
@@ -55,13 +58,16 @@ class CarritoPantalla extends StatelessWidget {
           body: items.isEmpty
               ? const EstadoMensaje(
                   icono: Icons.shopping_cart_outlined,
-                  texto: 'Todavía no has agregado productos')
+                  texto: 'Todavía no has agregado productos',
+                )
               : Column(
                   children: [
                     if (catalogo.sinConexion)
                       const AvisoSinConexion(
-                          texto: 'Sin conexión: tu carrito se conserva, pero '
-                              'confirmar el pedido necesita internet'),
+                        texto:
+                            'Sin conexión: tu carrito se conserva, pero '
+                            'confirmar el pedido necesita internet',
+                      ),
                     Expanded(
                       child: ListView.builder(
                         itemCount: items.length,
@@ -69,11 +75,14 @@ class CarritoPantalla extends StatelessWidget {
                           final item = items[i];
                           return ListTile(
                             title: Text(item.nombre),
-                            subtitle: Text([
-                              item.descripcion,
-                              if (item.notas.isNotEmpty) 'Notas: ${item.notas}',
-                              formatoPrecio(item.subtotal),
-                            ].join('\n')),
+                            subtitle: Text(
+                              [
+                                item.descripcion,
+                                if (item.notas.isNotEmpty)
+                                  'Notas: ${item.notas}',
+                                formatoPrecio(item.subtotal),
+                              ].join('\n'),
+                            ),
                             isThreeLine: true,
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -81,13 +90,15 @@ class CarritoPantalla extends StatelessWidget {
                                 IconButton(
                                   tooltip: 'Quitar uno',
                                   icon: const Icon(Icons.remove_circle_outline),
-                                  onPressed: () => carrito.cambiarCantidad(i, -1),
+                                  onPressed: () =>
+                                      carrito.cambiarCantidad(i, -1),
                                 ),
                                 Text('${item.cantidad}'),
                                 IconButton(
                                   tooltip: 'Agregar uno',
                                   icon: const Icon(Icons.add_circle_outline),
-                                  onPressed: () => carrito.cambiarCantidad(i, 1),
+                                  onPressed: () =>
+                                      carrito.cambiarCantidad(i, 1),
                                 ),
                               ],
                             ),
@@ -114,7 +125,10 @@ class CarritoPantalla extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Franja de recogida (Pick & Go)', style: tema.textTheme.titleSmall),
+            Text(
+              'Franja de recogida (Pick & Go)',
+              style: tema.textTheme.titleSmall,
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -131,7 +145,9 @@ class CarritoPantalla extends StatelessWidget {
                 ),
                 ActionChip(
                   avatar: const Icon(Icons.access_time),
-                  label: Text(hora == null ? 'Otra hora' : 'A las ${formatoHora(hora)}'),
+                  label: Text(
+                    hora == null ? 'Otra hora' : 'A las ${formatoHora(hora)}',
+                  ),
                   onPressed: () => _elegirHora(context),
                 ),
               ],
@@ -145,7 +161,10 @@ class CarritoPantalla extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text('Total'),
-                Text(formatoPrecio(carrito.total), style: tema.textTheme.titleLarge),
+                Text(
+                  formatoPrecio(carrito.total),
+                  style: tema.textTheme.titleLarge,
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -155,7 +174,9 @@ class CarritoPantalla extends StatelessWidget {
                   : () => _confirmar(context),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(carrito.enviando ? 'Enviando...' : 'Confirmar pedido'),
+                child: Text(
+                  carrito.enviando ? 'Enviando...' : 'Confirmar pedido',
+                ),
               ),
             ),
           ],

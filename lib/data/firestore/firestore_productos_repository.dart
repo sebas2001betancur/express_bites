@@ -13,17 +13,20 @@ class FirestoreProductosRepository implements ProductosRepository {
   @override
   Stream<Catalogo> observar() => _coleccion
       .snapshots(includeMetadataChanges: true)
-      .map((datos) => Catalogo(
-            datos.docs.map(ProductoDto.desdeFirestore).toList(),
-            sinConexion: datos.metadata.isFromCache,
-          ));
+      .map(
+        (datos) => Catalogo(
+          datos.docs.map(ProductoDto.desdeFirestore).toList(),
+          sinConexion: datos.metadata.isFromCache,
+        ),
+      );
 
   @override
   Future<void> cambiarDisponible(String id, bool disponible) =>
       proteger(() => _coleccion.doc(id).update({'disponible': disponible}));
 
   @override
-  Future<void> cargarMenuInicial(List<Producto> productos) => proteger(() async {
+  Future<void> cargarMenuInicial(List<Producto> productos) =>
+      proteger(() async {
         for (final p in productos) {
           await _coleccion.doc(p.id).set(ProductoDto.aFirestore(p));
         }

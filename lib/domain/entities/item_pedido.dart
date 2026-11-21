@@ -32,15 +32,15 @@ class ItemPedido {
       [tamano, if (leche != null) 'leche $leche', ...extras].join(', ');
 
   ItemPedido conCantidad(int nueva) => ItemPedido(
-        productoId: productoId,
-        nombre: nombre,
-        tamano: tamano,
-        leche: leche,
-        extras: extras,
-        notas: notas,
-        precioUnitario: precioUnitario,
-        cantidad: nueva,
-      );
+    productoId: productoId,
+    nombre: nombre,
+    tamano: tamano,
+    leche: leche,
+    extras: extras,
+    notas: notas,
+    precioUnitario: precioUnitario,
+    cantidad: nueva,
+  );
 }
 
 /// RN-02: el precio se recalcula con cada opción.
@@ -71,7 +71,11 @@ ItemPedido armarItem(
     leche: leche,
     extras: List.unmodifiable(extras),
     notas: notas.trim(),
-    precioUnitario: precioPersonalizado(producto,
-        tamano: tamano, leche: leche, extras: extras),
+    precioUnitario: precioPersonalizado(
+      producto,
+      tamano: tamano,
+      leche: leche,
+      extras: extras,
+    ),
   );
 }

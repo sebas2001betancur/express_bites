@@ -11,7 +11,8 @@ class DetalleProductoPantalla extends StatefulWidget {
   final Producto producto;
 
   @override
-  State<DetalleProductoPantalla> createState() => _DetalleProductoPantallaState();
+  State<DetalleProductoPantalla> createState() =>
+      _DetalleProductoPantallaState();
 }
 
 class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
@@ -20,8 +21,12 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
   final Set<String> _extras = {};
   final _notas = TextEditingController();
 
-  int get _precio => precioPersonalizado(widget.producto,
-      tamano: _tamano, leche: _leche, extras: _extras.toList());
+  int get _precio => precioPersonalizado(
+    widget.producto,
+    tamano: _tamano,
+    leche: _leche,
+    extras: _extras.toList(),
+  );
 
   @override
   void dispose() {
@@ -31,8 +36,13 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
 
   void _agregar() {
     try {
-      final item = armarItem(widget.producto,
-          tamano: _tamano, leche: _leche, extras: _extras.toList(), notas: _notas.text);
+      final item = armarItem(
+        widget.producto,
+        tamano: _tamano,
+        leche: _leche,
+        extras: _extras.toList(),
+        notas: _notas.text,
+      );
       Navigator.pop(context, item);
     } on Falla catch (f) {
       ScaffoldMessenger.of(context)
@@ -60,7 +70,10 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
           const SizedBox(height: 20),
           Text(producto.nombre, style: tema.textTheme.headlineSmall),
           Text(producto.categoria, style: tema.textTheme.bodyMedium),
-          Text(formatoPrecio(producto.precio), style: tema.textTheme.titleLarge),
+          Text(
+            formatoPrecio(producto.precio),
+            style: tema.textTheme.titleLarge,
+          ),
           const SizedBox(height: 24),
           Text('Tamaño *', style: tema.textTheme.titleMedium),
           RadioGroup<String>(
@@ -71,9 +84,11 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
                 for (final e in recargoTamano.entries)
                   RadioListTile<String>(
                     value: e.key,
-                    title: Text(e.value == 0
-                        ? e.key
-                        : '${e.key} (+${formatoPrecio(e.value)})'),
+                    title: Text(
+                      e.value == 0
+                          ? e.key
+                          : '${e.key} (+${formatoPrecio(e.value)})',
+                    ),
                   ),
               ],
             ),
@@ -84,14 +99,18 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
           DropdownButtonFormField<String>(
             initialValue: _leche,
             decoration: const InputDecoration(
-                border: OutlineInputBorder(), labelText: 'Selecciona una opción'),
+              border: OutlineInputBorder(),
+              labelText: 'Selecciona una opción',
+            ),
             items: [
               for (final e in recargoLeche.entries)
                 DropdownMenuItem(
                   value: e.key,
-                  child: Text(e.value == 0
-                      ? e.key
-                      : '${e.key} (+${formatoPrecio(e.value)})'),
+                  child: Text(
+                    e.value == 0
+                        ? e.key
+                        : '${e.key} (+${formatoPrecio(e.value)})',
+                  ),
                 ),
             ],
             onChanged: (v) => setState(() => _leche = v),
@@ -104,7 +123,8 @@ class _DetalleProductoPantallaState extends State<DetalleProductoPantalla> {
               subtitle: Text('+${formatoPrecio(e.value)}'),
               value: _extras.contains(e.key),
               onChanged: (v) => setState(
-                  () => v == true ? _extras.add(e.key) : _extras.remove(e.key)),
+                () => v == true ? _extras.add(e.key) : _extras.remove(e.key),
+              ),
             ),
           const SizedBox(height: 12),
           TextField(

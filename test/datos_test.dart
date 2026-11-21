@@ -67,8 +67,14 @@ void main() {
 
   group('OpenMeteoClimaRepository', () {
     test('convierte el JSON a Clima', () async {
-      final api = OpenMeteoClimaRepository(MockClient((_) async => http.Response(
-          '{"current":{"temperature_2m":24,"precipitation":0.4}}', 200)));
+      final api = OpenMeteoClimaRepository(
+        MockClient(
+          (_) async => http.Response(
+            '{"current":{"temperature_2m":24,"precipitation":0.4}}',
+            200,
+          ),
+        ),
+      );
       final clima = await api.actual();
       expect(clima.temperatura, 24.0);
       expect(clima.lluvia, 0.4);
@@ -76,19 +82,29 @@ void main() {
 
     test('un código distinto de 200 es una Falla del servidor', () async {
       final api = OpenMeteoClimaRepository(
-          MockClient((_) async => http.Response('caído', 503)));
+        MockClient((_) async => http.Response('caído', 503)),
+      );
       await expectLater(api.actual(), throwsA(fallaCon('servidor-503')));
     });
 
     test('sin red es una Falla sin-conexion', () async {
       final api = OpenMeteoClimaRepository(
-          MockClient((_) async => throw const SocketException('sin red')));
+        MockClient((_) async => throw const SocketException('sin red')),
+      );
+      await expectLater(api.actual(), throwsA(fallaCon('sin-conexion')));
+    });
+
+    test('un error inesperado del cliente es una Falla sin-conexion', () async {
+      final api = OpenMeteoClimaRepository(
+        MockClient((_) async => throw const HandshakeException('tls')),
+      );
       await expectLater(api.actual(), throwsA(fallaCon('sin-conexion')));
     });
 
     test('un JSON roto es una Falla respuesta-invalida', () async {
       final api = OpenMeteoClimaRepository(
-          MockClient((_) async => http.Response('{"otra":1}', 200)));
+        MockClient((_) async => http.Response('{"otra":1}', 200)),
+      );
       await expectLater(api.actual(), throwsA(fallaCon('respuesta-invalida')));
     });
   });

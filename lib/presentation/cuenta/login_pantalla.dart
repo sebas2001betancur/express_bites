@@ -53,23 +53,36 @@ class _LoginPantallaState extends State<LoginPantalla> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Icon(Icons.local_cafe, size: 84, color: tema.colorScheme.primary),
+                      Icon(
+                        Icons.local_cafe,
+                        size: 84,
+                        color: tema.colorScheme.primary,
+                      ),
                       const SizedBox(height: 20),
-                      Text('ExpressBites',
-                          textAlign: TextAlign.center,
-                          style: tema.textTheme.headlineMedium
-                              ?.copyWith(fontWeight: FontWeight.bold)),
-                      Text('Pick & Go',
-                          textAlign: TextAlign.center,
-                          style: tema.textTheme.titleMedium),
+                      Text(
+                        'ExpressBites',
+                        textAlign: TextAlign.center,
+                        style: tema.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Pick & Go',
+                        textAlign: TextAlign.center,
+                        style: tema.textTheme.titleMedium,
+                      ),
                       const SizedBox(height: 24),
                       SegmentedButton<bool>(
                         segments: const [
                           ButtonSegment(value: false, label: Text('Ingresar')),
-                          ButtonSegment(value: true, label: Text('Crear cuenta')),
+                          ButtonSegment(
+                            value: true,
+                            label: Text('Crear cuenta'),
+                          ),
                         ],
                         selected: {_registro},
-                        onSelectionChanged: (s) => setState(() => _registro = s.first),
+                        onSelectionChanged: (s) =>
+                            setState(() => _registro = s.first),
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
@@ -81,7 +94,9 @@ class _LoginPantallaState extends State<LoginPantalla> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (v) {
-                          if (v == null || v.trim().isEmpty) return 'Ingresa tu correo';
+                          if (v == null || v.trim().isEmpty) {
+                            return 'Ingresa tu correo';
+                          }
                           if (!v.contains('@') || !v.contains('.')) {
                             return 'El correo no tiene un formato válido';
                           }
@@ -98,7 +113,9 @@ class _LoginPantallaState extends State<LoginPantalla> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (v) {
-                          if (v == null || v.isEmpty) return 'Ingresa tu contraseña';
+                          if (v == null || v.isEmpty) {
+                            return 'Ingresa tu contraseña';
+                          }
                           if (v.length < 6) {
                             return 'La contraseña necesita al menos 6 caracteres';
                           }
@@ -107,7 +124,10 @@ class _LoginPantallaState extends State<LoginPantalla> {
                       ),
                       if (_registro) ...[
                         const SizedBox(height: 20),
-                        Text('Tipo de cuenta', style: tema.textTheme.titleSmall),
+                        Text(
+                          'Tipo de cuenta',
+                          style: tema.textTheme.titleSmall,
+                        ),
                         const SizedBox(height: 8),
                         Wrap(
                           spacing: 8,
@@ -115,21 +135,25 @@ class _LoginPantallaState extends State<LoginPantalla> {
                             ChoiceChip(
                               label: const Text('Cliente'),
                               selected: _rol == Rol.cliente,
-                              onSelected: (_) => setState(() => _rol = Rol.cliente),
+                              onSelected: (_) =>
+                                  setState(() => _rol = Rol.cliente),
                             ),
                             ChoiceChip(
                               label: const Text('Personal de barra'),
                               selected: _rol == Rol.personal,
-                              onSelected: (_) => setState(() => _rol = Rol.personal),
+                              onSelected: (_) =>
+                                  setState(() => _rol = Rol.personal),
                             ),
                           ],
                         ),
                       ],
                       if (vm.error != null) ...[
                         const SizedBox(height: 16),
-                        Text(vm.error!,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: tema.colorScheme.error)),
+                        Text(
+                          vm.error!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: tema.colorScheme.error),
+                        ),
                       ],
                       const SizedBox(height: 24),
                       FilledButton.icon(
@@ -137,9 +161,11 @@ class _LoginPantallaState extends State<LoginPantalla> {
                         icon: const Icon(Icons.login),
                         label: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Text(vm.enviando
-                              ? 'Un momento...'
-                              : (_registro ? 'Crear cuenta' : 'Ingresar')),
+                          child: Text(
+                            vm.enviando
+                                ? 'Un momento...'
+                                : (_registro ? 'Crear cuenta' : 'Ingresar'),
+                          ),
                         ),
                       ),
                     ],

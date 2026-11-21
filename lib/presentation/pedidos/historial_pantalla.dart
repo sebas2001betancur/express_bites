@@ -26,7 +26,9 @@ class HistorialPantalla extends StatelessWidget {
           }
           if (lista.isEmpty) {
             return const EstadoMensaje(
-                icono: Icons.history, texto: 'Todavía no tienes pedidos');
+              icono: Icons.history,
+              texto: 'Todavía no tienes pedidos',
+            );
           }
           return ListView.builder(
             itemCount: lista.length,
@@ -35,12 +37,15 @@ class HistorialPantalla extends StatelessWidget {
               return ListTile(
                 leading: const Icon(Icons.receipt_long),
                 title: Text('${p.claimId} · ${formatoPrecio(p.total)}'),
-                subtitle: Text('${formatoFecha(p.creado)} · recogida '
-                    '${formatoHora(p.recogida)} · ${p.estado.etiqueta}'),
+                subtitle: Text(
+                  '${formatoFecha(p.creado)} · recogida '
+                  '${formatoHora(p.recogida)} · ${p.estado.etiqueta}',
+                ),
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => TicketPantalla(inicial: p, seguimiento: seguimiento),
+                    builder: (_) =>
+                        TicketPantalla(inicial: p, seguimiento: seguimiento),
                   ),
                 ),
               );

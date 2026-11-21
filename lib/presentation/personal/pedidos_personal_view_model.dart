@@ -38,6 +38,9 @@ class PedidosPersonalViewModel extends ChangeNotifier {
     final buscado = codigo.trim().toUpperCase();
     for (final p in lista ?? const <Pedido>[]) {
       if (p.claimId == buscado) {
+        if (p.estado != EstadoPedido.listo) {
+          return 'El pedido ${p.claimId} aún no está listo';
+        }
         unawaited(_cambiar(p.id, EstadoPedido.entregado));
         return null;
       }

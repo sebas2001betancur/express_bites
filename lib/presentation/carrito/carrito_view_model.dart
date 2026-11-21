@@ -12,9 +12,9 @@ class CarritoViewModel extends ChangeNotifier {
     required PedidosRepository pedidos,
     required String uid,
     DateTime Function()? reloj,
-  })  : _pedidos = pedidos,
-        _uid = uid,
-        _reloj = reloj ?? DateTime.now;
+  }) : _pedidos = pedidos,
+       _uid = uid,
+       _reloj = reloj ?? DateTime.now;
 
   final PedidosRepository _pedidos;
   final String _uid;
@@ -22,7 +22,8 @@ class CarritoViewModel extends ChangeNotifier {
   final List<ItemPedido> _items = [];
   bool _cerrado = false;
 
-  /// Id del pedido en curso: se reutiliza al reintentar para no duplicar.
+  /// Id del pedido en curso: se reutiliza al reintentar (aunque cambie el
+  /// carrito) y solo se borra cuando el pedido se crea con éxito.
   String? _idEnCurso;
 
   Duration? atajo;
@@ -36,7 +37,6 @@ class CarritoViewModel extends ChangeNotifier {
 
   void agregar(ItemPedido item) {
     _items.add(item);
-    _idEnCurso = null;
     error = null;
     _notificar();
   }
@@ -48,7 +48,6 @@ class CarritoViewModel extends ChangeNotifier {
     } else {
       _items[indice] = _items[indice].conCantidad(nueva);
     }
-    _idEnCurso = null;
     _notificar();
   }
 
@@ -67,6 +66,7 @@ class CarritoViewModel extends ChangeNotifier {
   }
 
   Future<Pedido?> confirmar() async {
+    if (enviando) return null;
     final ahora = _reloj();
     if (_items.isEmpty) return _fallar('carrito-vacio');
     final recogida = atajo != null ? ahora.add(atajo!) : horaFija;

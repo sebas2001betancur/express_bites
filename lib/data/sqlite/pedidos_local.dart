@@ -11,8 +11,12 @@ class PedidosLocal {
 
   Future<List<Pedido>> leerMios(String uid) async {
     try {
-      final filas = await _db.query('pedidos',
-          where: 'uid = ?', whereArgs: [uid], orderBy: 'creado DESC');
+      final filas = await _db.query(
+        'pedidos',
+        where: 'uid = ?',
+        whereArgs: [uid],
+        orderBy: 'creado DESC',
+      );
       return filas.map(PedidoDto.desdeFila).toList();
     } on DatabaseException {
       throw const Falla('base-local');
@@ -21,8 +25,11 @@ class PedidosLocal {
 
   Future<void> guardar(Pedido pedido) async {
     try {
-      await _db.insert('pedidos', PedidoDto.aFila(pedido),
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      await _db.insert(
+        'pedidos',
+        PedidoDto.aFila(pedido),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     } on DatabaseException {
       throw const Falla('base-local');
     }

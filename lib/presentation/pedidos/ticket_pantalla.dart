@@ -4,7 +4,11 @@ import 'package:express_bites/presentation/pedidos/pedidos_cliente_view_model.da
 import 'package:flutter/material.dart';
 
 class TicketPantalla extends StatelessWidget {
-  const TicketPantalla({super.key, required this.inicial, required this.seguimiento});
+  const TicketPantalla({
+    super.key,
+    required this.inicial,
+    required this.seguimiento,
+  });
 
   final Pedido inicial;
   final PedidosClienteViewModel seguimiento;
@@ -27,30 +31,40 @@ class TicketPantalla extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      Icon(listo ? Icons.notifications_active : Icons.check_circle,
-                          color: Colors.green, size: 56),
+                      Icon(
+                        listo ? Icons.notifications_active : Icons.check_circle,
+                        color: Colors.green,
+                        size: 56,
+                      ),
                       const SizedBox(height: 12),
                       const Text('Claim ID'),
-                      SelectableText(pedido.claimId,
-                          style: tema.textTheme.headlineMedium
-                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      SelectableText(
+                        pedido.claimId,
+                        style: tema.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       Chip(label: Text(pedido.estado.etiqueta)),
                       if (pedido.pendiente)
                         const Text('Pendiente de enviar al servidor'),
                       const SizedBox(height: 8),
-                      Text('Recogida: ${formatoHora(pedido.recogida)} · '
-                          '${formatoFecha(pedido.recogida)}'),
+                      Text(
+                        'Recogida: ${formatoHora(pedido.recogida)} · '
+                        '${formatoFecha(pedido.recogida)}',
+                      ),
                       const Divider(height: 32),
                       for (final item in pedido.items)
                         ListTile(
                           dense: true,
                           contentPadding: EdgeInsets.zero,
                           title: Text('${item.cantidad} × ${item.nombre}'),
-                          subtitle: Text([
-                            item.descripcion,
-                            if (item.notas.isNotEmpty) 'Notas: ${item.notas}',
-                          ].join('\n')),
+                          subtitle: Text(
+                            [
+                              item.descripcion,
+                              if (item.notas.isNotEmpty) 'Notas: ${item.notas}',
+                            ].join('\n'),
+                          ),
                           trailing: Text(formatoPrecio(item.subtotal)),
                         ),
                       const Divider(height: 32),
@@ -58,8 +72,10 @@ class TicketPantalla extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Total'),
-                          Text(formatoPrecio(pedido.total),
-                              style: tema.textTheme.titleLarge),
+                          Text(
+                            formatoPrecio(pedido.total),
+                            style: tema.textTheme.titleLarge,
+                          ),
                         ],
                       ),
                     ],

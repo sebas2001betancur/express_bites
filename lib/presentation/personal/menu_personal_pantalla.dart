@@ -29,7 +29,9 @@ class _MenuPersonalPantallaState extends State<MenuPersonalPantalla> {
       body: ListenableBuilder(
         listenable: vm,
         builder: (context, _) {
-          if (vm.cargando) return const Center(child: CircularProgressIndicator());
+          if (vm.cargando) {
+            return const Center(child: CircularProgressIndicator());
+          }
           final productos = vm.todos;
           final error = vm.error;
           return Column(
@@ -38,8 +40,12 @@ class _MenuPersonalPantallaState extends State<MenuPersonalPantalla> {
               if (error != null)
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Text(error,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                  child: Text(
+                    error,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
                 ),
               Expanded(
                 child: productos.isEmpty
@@ -47,15 +53,18 @@ class _MenuPersonalPantallaState extends State<MenuPersonalPantalla> {
                         icono: Icons.restaurant_menu,
                         texto: 'El menú está vacío',
                         accion: 'Cargar menú de ejemplo',
-                        alPresionar: () =>
-                            vm.cargarMenuInicial(widget.dependencias.menuInicial),
+                        alPresionar: () => vm.cargarMenuInicial(
+                          widget.dependencias.menuInicial,
+                        ),
                       )
                     : ListView(
                         children: [
                           for (final p in productos)
                             SwitchListTile(
                               title: Text(p.nombre),
-                              subtitle: Text('${p.categoria} · ${formatoPrecio(p.precio)}'),
+                              subtitle: Text(
+                                '${p.categoria} · ${formatoPrecio(p.precio)}',
+                              ),
                               value: p.disponible,
                               onChanged: (v) => vm.cambiarDisponible(p.id, v),
                             ),

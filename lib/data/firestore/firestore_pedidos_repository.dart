@@ -23,11 +23,15 @@ class FirestorePedidosRepository implements PedidosRepository {
       creado: DateTime.now(),
     );
     // set con un id fijo: si se reintenta, se escribe el mismo documento.
-    await proteger(() => _coleccion
-        .doc(id)
-        .set(PedidoDto.aFirestore(pedido))
-        .timeout(const Duration(seconds: 8),
-            onTimeout: () => throw const Falla('sin-conexion')));
+    await proteger(
+      () => _coleccion
+          .doc(id)
+          .set(PedidoDto.aFirestore(pedido))
+          .timeout(
+            const Duration(seconds: 8),
+            onTimeout: () => throw const Falla('sin-conexion'),
+          ),
+    );
     return pedido;
   }
 
@@ -35,19 +39,25 @@ class FirestorePedidosRepository implements PedidosRepository {
   @override
   Stream<List<Pedido>> observarMios(String uid) => _coleccion
       .where('uid', isEqualTo: uid)
-      .snapshots()
-      .map((datos) => datos.docs.map(PedidoDto.desdeFirestore).toList()
-        ..sort((a, b) => b.creado.compareTo(a.creado)));
+      .snapshots(includeMetadataChanges: true)
+      .map(
+        (datos) =>
+            datos.docs.map(PedidoDto.desdeFirestore).toList()
+              ..sort((a, b) => b.creado.compareTo(a.creado)),
+      );
 
   @override
   Stream<List<Pedido>> observarActivos() => _coleccion
-      .where('estado', whereIn: [
-        EstadoPedido.enPreparacion.codigo,
-        EstadoPedido.listo.codigo,
-      ])
-      .snapshots()
-      .map((datos) => datos.docs.map(PedidoDto.desdeFirestore).toList()
-        ..sort((a, b) => a.recogida.compareTo(b.recogida)));
+      .where(
+        'estado',
+        whereIn: [EstadoPedido.enPreparacion.codigo, EstadoPedido.listo.codigo],
+      )
+      .snapshots(includeMetadataChanges: true)
+      .map(
+        (datos) =>
+            datos.docs.map(PedidoDto.desdeFirestore).toList()
+              ..sort((a, b) => a.recogida.compareTo(b.recogida)),
+      );
 
   @override
   Future<void> cambiarEstado(String id, EstadoPedido estado) =>

@@ -4,7 +4,11 @@ import 'package:express_bites/presentation/tema/tema_view_model.dart';
 import 'package:flutter/material.dart';
 
 class ExpressBitesApp extends StatelessWidget {
-  const ExpressBitesApp({super.key, required this.dependencias, required this.tema});
+  const ExpressBitesApp({
+    super.key,
+    required this.dependencias,
+    required this.tema,
+  });
 
   final Dependencias dependencias;
   final TemaViewModel tema;
@@ -22,7 +26,9 @@ class ExpressBitesApp extends StatelessWidget {
         ),
         darkTheme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepOrange, brightness: Brightness.dark),
+            seedColor: Colors.deepOrange,
+            brightness: Brightness.dark,
+          ),
           useMaterial3: true,
         ),
         themeMode: tema.modo,
