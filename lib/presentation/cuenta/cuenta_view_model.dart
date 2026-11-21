@@ -48,9 +48,10 @@ class CuentaViewModel extends ChangeNotifier {
       await accion();
     } on Falla catch (f) {
       error = mensajeDe(f.codigo);
+    } finally {
+      enviando = false;
+      _notificar();
     }
-    enviando = false;
-    _notificar();
   }
 
   void _notificar() {

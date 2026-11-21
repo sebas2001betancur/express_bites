@@ -1,5 +1,6 @@
 import 'package:express_bites/domain/entities/usuario.dart';
 import 'package:express_bites/domain/failures/falla.dart';
+import 'package:express_bites/domain/repositories/cuenta_repository.dart';
 import 'package:express_bites/presentation/cuenta/cuenta_view_model.dart';
 import 'package:express_bites/presentation/tema/tema_view_model.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,14 @@ void main() {
       expect(vm.error, 'Correo o contraseña incorrectos');
       expect(vm.enviando, isFalse);
     });
+
+    test('enviando vuelve a false aunque falle con algo que no es Falla',
+        () async {
+      final otro = CuentaViewModel(_CuentaQueExplota());
+      addTearDown(otro.dispose);
+      await expectLater(otro.iniciar('a@b.co', '123456'), throwsStateError);
+      expect(otro.enviando, isFalse);
+    });
   });
 
   test('TemaViewModel lee el tema guardado y guarda el nuevo', () async {
@@ -56,4 +65,19 @@ void main() {
     expect(vm.modo, ThemeMode.light);
     vm.dispose();
   });
+}
+
+class _CuentaQueExplota implements CuentaRepository {
+  @override
+  Stream<Usuario?> sesion() => const Stream.empty();
+
+  @override
+  Future<void> registrar(String correo, String clave, Rol rol) async {}
+
+  @override
+  Future<void> iniciar(String correo, String clave) async =>
+      throw StateError('x');
+
+  @override
+  Future<void> salir() async {}
 }
