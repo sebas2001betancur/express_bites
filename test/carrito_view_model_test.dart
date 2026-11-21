@@ -70,4 +70,16 @@ void main() {
     expect(pedidos.idsUsados, hasLength(2));
     expect(pedidos.idsUsados.toSet(), hasLength(1));
   });
+
+  test('si se cambia el carrito tras un fallo, el reintento usa el mismo id',
+      () async {
+    vm.agregar(item);
+    vm.elegirAtajo(const Duration(minutes: 15));
+    pedidos.falloAlCrear = const Falla('sin-conexion');
+    expect(await vm.confirmar(), isNull);
+
+    vm.cambiarCantidad(0, 1);
+    expect(await vm.confirmar(), isNotNull);
+    expect(pedidos.idsUsados.toSet(), hasLength(1));
+  });
 }
