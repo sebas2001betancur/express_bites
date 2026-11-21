@@ -29,8 +29,9 @@ class _MenuPersonalPantallaState extends State<MenuPersonalPantalla> {
       body: ListenableBuilder(
         listenable: vm,
         builder: (context, _) {
-          if (vm.cargando)
+          if (vm.cargando) {
             return const Center(child: CircularProgressIndicator());
+          }
           final productos = vm.todos;
           final error = vm.error;
           return Column(

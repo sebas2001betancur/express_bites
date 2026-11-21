@@ -184,8 +184,9 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
   }
 
   Widget _lista() {
-    if (catalogo.cargando)
+    if (catalogo.cargando) {
       return const Center(child: CircularProgressIndicator());
+    }
     final error = catalogo.error;
     if (error != null && catalogo.todos.isEmpty) {
       return EstadoMensaje(icono: Icons.cloud_off, texto: error);

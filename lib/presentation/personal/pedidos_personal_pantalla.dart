@@ -119,8 +119,9 @@ class _PedidosPersonalPantallaState extends State<PedidosPersonalPantalla> {
         builder: (context, _) {
           final lista = vm.lista;
           final error = vm.error;
-          if (lista == null)
+          if (lista == null) {
             return const Center(child: CircularProgressIndicator());
+          }
           return Column(
             children: [
               if (error != null)

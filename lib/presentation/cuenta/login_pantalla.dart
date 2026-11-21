@@ -94,8 +94,9 @@ class _LoginPantallaState extends State<LoginPantalla> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (v) {
-                          if (v == null || v.trim().isEmpty)
+                          if (v == null || v.trim().isEmpty) {
                             return 'Ingresa tu correo';
+                          }
                           if (!v.contains('@') || !v.contains('.')) {
                             return 'El correo no tiene un formato válido';
                           }
@@ -112,8 +113,9 @@ class _LoginPantallaState extends State<LoginPantalla> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (v) {
-                          if (v == null || v.isEmpty)
+                          if (v == null || v.isEmpty) {
                             return 'Ingresa tu contraseña';
+                          }
                           if (v.length < 6) {
                             return 'La contraseña necesita al menos 6 caracteres';
                           }
