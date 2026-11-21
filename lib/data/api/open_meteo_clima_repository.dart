@@ -30,6 +30,8 @@ class OpenMeteoClimaRepository implements ClimaRepository {
       }
       return ClimaDto.desdeJson(
           jsonDecode(respuesta.body) as Map<String, dynamic>);
+    } on Falla {
+      rethrow;
     } on TimeoutException {
       throw const Falla('tiempo-agotado');
     } on SocketException {
@@ -40,6 +42,8 @@ class OpenMeteoClimaRepository implements ClimaRepository {
       throw const Falla('respuesta-invalida');
     } on TypeError {
       throw const Falla('respuesta-invalida');
+    } on Exception {
+      throw const Falla('sin-conexion');
     }
   }
 }

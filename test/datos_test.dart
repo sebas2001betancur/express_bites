@@ -86,6 +86,12 @@ void main() {
       await expectLater(api.actual(), throwsA(fallaCon('sin-conexion')));
     });
 
+    test('un error inesperado del cliente es una Falla sin-conexion', () async {
+      final api = OpenMeteoClimaRepository(
+          MockClient((_) async => throw const HandshakeException('tls')));
+      await expectLater(api.actual(), throwsA(fallaCon('sin-conexion')));
+    });
+
     test('un JSON roto es una Falla respuesta-invalida', () async {
       final api = OpenMeteoClimaRepository(
           MockClient((_) async => http.Response('{"otra":1}', 200)));

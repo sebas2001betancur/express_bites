@@ -43,9 +43,19 @@ void main() {
   test('el código correcto entrega y no permite doble despacho', () async {
     final p = await crear();
     await esperar();
+    vm.marcarListo(p);
+    await esperar();
     expect(await vm.entregarPorCodigo(' ${p.claimId.toLowerCase()} '), isNull);
     await esperar();
     expect(vm.lista, isEmpty);
     expect(await vm.entregarPorCodigo(p.claimId), contains('No hay un pedido activo'));
+  });
+
+  test('no entrega un pedido que aún está en preparación', () async {
+    final p = await crear();
+    await esperar();
+    expect(await vm.entregarPorCodigo(p.claimId), contains('aún no está listo'));
+    await esperar();
+    expect(vm.lista, hasLength(1));
   });
 }
