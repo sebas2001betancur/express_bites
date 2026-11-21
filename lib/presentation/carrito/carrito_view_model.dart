@@ -12,9 +12,9 @@ class CarritoViewModel extends ChangeNotifier {
     required PedidosRepository pedidos,
     required String uid,
     DateTime Function()? reloj,
-  })  : _pedidos = pedidos,
-        _uid = uid,
-        _reloj = reloj ?? DateTime.now;
+  }) : _pedidos = pedidos,
+       _uid = uid,
+       _reloj = reloj ?? DateTime.now;
 
   final PedidosRepository _pedidos;
   final String _uid;

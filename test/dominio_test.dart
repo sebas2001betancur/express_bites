@@ -25,17 +25,23 @@ void main() {
 
     test('el precio suma tamaño, leche y extras', () {
       expect(
-        precioPersonalizado(cafe,
-            tamano: 'Grande',
-            leche: 'Almendras',
-            extras: ['Extra de café', 'Canela']),
+        precioPersonalizado(
+          cafe,
+          tamano: 'Grande',
+          leche: 'Almendras',
+          extras: ['Extra de café', 'Canela'],
+        ),
         4500 + 2000 + 1000 + 1500 + 500,
       );
     });
 
     test('el ítem guarda leche y notas recortadas', () {
-      final item = armarItem(cafe,
-          tamano: 'Mediano', leche: 'Deslactosada', notas: '  poca azúcar ');
+      final item = armarItem(
+        cafe,
+        tamano: 'Mediano',
+        leche: 'Deslactosada',
+        notas: '  poca azúcar ',
+      );
       expect(item.leche, 'Deslactosada');
       expect(item.notas, 'poca azúcar');
       expect(item.precioUnitario, 4500 + 1000 + 500);
@@ -55,9 +61,10 @@ void main() {
     test('rechaza un carrito vacío', () {
       expect(
         () => NuevoPedido(
-            items: const [],
-            recogida: ahora.add(const Duration(minutes: 30)),
-            ahora: ahora),
+          items: const [],
+          recogida: ahora.add(const Duration(minutes: 30)),
+          ahora: ahora,
+        ),
         throwsA(fallaCon('carrito-vacio')),
       );
     });
@@ -65,9 +72,10 @@ void main() {
     test('rechaza una recogida a menos de 15 minutos', () {
       expect(
         () => NuevoPedido(
-            items: [item],
-            recogida: ahora.add(const Duration(minutes: 14)),
-            ahora: ahora),
+          items: [item],
+          recogida: ahora.add(const Duration(minutes: 14)),
+          ahora: ahora,
+        ),
         throwsA(fallaCon('hora-invalida')),
       );
     });
@@ -98,11 +106,17 @@ void main() {
   });
 
   test('Clima sugiere bebidas según temperatura y lluvia', () {
-    expect(const Clima(temperatura: 26, lluvia: 0).categoriaSugerida,
-        'Bebidas frías');
-    expect(const Clima(temperatura: 26, lluvia: 1.2).categoriaSugerida,
-        'Bebidas calientes');
-    expect(const Clima(temperatura: 17, lluvia: 0).categoriaSugerida,
-        'Bebidas calientes');
+    expect(
+      const Clima(temperatura: 26, lluvia: 0).categoriaSugerida,
+      'Bebidas frías',
+    );
+    expect(
+      const Clima(temperatura: 26, lluvia: 1.2).categoriaSugerida,
+      'Bebidas calientes',
+    );
+    expect(
+      const Clima(temperatura: 17, lluvia: 0).categoriaSugerida,
+      'Bebidas calientes',
+    );
   });
 }

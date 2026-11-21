@@ -28,7 +28,9 @@ void main() {
     });
 
     test('muestra el usuario con su rol', () async {
-      repo.emitir(const Usuario(uid: 'u1', correo: 'a@b.co', rol: Rol.personal));
+      repo.emitir(
+        const Usuario(uid: 'u1', correo: 'a@b.co', rol: Rol.personal),
+      );
       await esperar();
       expect(vm.usuario?.rol, Rol.personal);
     });
@@ -46,13 +48,15 @@ void main() {
       expect(vm.enviando, isFalse);
     });
 
-    test('enviando vuelve a false aunque falle con algo que no es Falla',
-        () async {
-      final otro = CuentaViewModel(_CuentaQueExplota());
-      addTearDown(otro.dispose);
-      await expectLater(otro.iniciar('a@b.co', '123456'), throwsStateError);
-      expect(otro.enviando, isFalse);
-    });
+    test(
+      'enviando vuelve a false aunque falle con algo que no es Falla',
+      () async {
+        final otro = CuentaViewModel(_CuentaQueExplota());
+        addTearDown(otro.dispose);
+        await expectLater(otro.iniciar('a@b.co', '123456'), throwsStateError);
+        expect(otro.enviando, isFalse);
+      },
+    );
   });
 
   test('TemaViewModel lee el tema guardado y guarda el nuevo', () async {

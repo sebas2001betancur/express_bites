@@ -25,7 +25,8 @@ class PedidosPersonalPantalla extends StatefulWidget {
   final TemaViewModel tema;
 
   @override
-  State<PedidosPersonalPantalla> createState() => _PedidosPersonalPantallaState();
+  State<PedidosPersonalPantalla> createState() =>
+      _PedidosPersonalPantallaState();
 }
 
 class _PedidosPersonalPantallaState extends State<PedidosPersonalPantalla> {
@@ -52,7 +53,10 @@ class _PedidosPersonalPantallaState extends State<PedidosPersonalPantalla> {
           decoration: const InputDecoration(hintText: 'EB-XXXXXXXX'),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
           FilledButton(
             onPressed: () => Navigator.pop(context, _codigo.text),
             child: const Text('Entregar'),
@@ -64,7 +68,11 @@ class _PedidosPersonalPantallaState extends State<PedidosPersonalPantalla> {
     final problema = await vm.entregarPorCodigo(codigo);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(problema ?? 'Pedido ${codigo.trim().toUpperCase()} entregado')),
+      SnackBar(
+        content: Text(
+          problema ?? 'Pedido ${codigo.trim().toUpperCase()} entregado',
+        ),
+      ),
     );
   }
 
@@ -80,7 +88,9 @@ class _PedidosPersonalPantallaState extends State<PedidosPersonalPantalla> {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => MenuPersonalPantalla(dependencias: widget.dependencias)),
+                builder: (_) =>
+                    MenuPersonalPantalla(dependencias: widget.dependencias),
+              ),
             ),
           ),
           IconButton(
@@ -90,7 +100,10 @@ class _PedidosPersonalPantallaState extends State<PedidosPersonalPantalla> {
               context,
               MaterialPageRoute(
                 builder: (_) => PerfilPantalla(
-                    usuario: widget.usuario, cuenta: widget.cuenta, tema: widget.tema),
+                  usuario: widget.usuario,
+                  cuenta: widget.cuenta,
+                  tema: widget.tema,
+                ),
               ),
             ),
           ),
@@ -106,19 +119,26 @@ class _PedidosPersonalPantallaState extends State<PedidosPersonalPantalla> {
         builder: (context, _) {
           final lista = vm.lista;
           final error = vm.error;
-          if (lista == null) return const Center(child: CircularProgressIndicator());
+          if (lista == null)
+            return const Center(child: CircularProgressIndicator());
           return Column(
             children: [
               if (error != null)
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Text(error,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                  child: Text(
+                    error,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
                 ),
               Expanded(
                 child: lista.isEmpty
                     ? const EstadoMensaje(
-                        icono: Icons.inbox_outlined, texto: 'No hay pedidos activos')
+                        icono: Icons.inbox_outlined,
+                        texto: 'No hay pedidos activos',
+                      )
                     : ListView.builder(
                         padding: const EdgeInsets.only(bottom: 88),
                         itemCount: lista.length,
@@ -144,25 +164,31 @@ class _PedidosPersonalPantallaState extends State<PedidosPersonalPantalla> {
             Row(
               children: [
                 Expanded(
-                  child: Text('${formatoHora(p.recogida)} · ${p.claimId}',
-                      style: Theme.of(context).textTheme.titleMedium),
+                  child: Text(
+                    '${formatoHora(p.recogida)} · ${p.claimId}',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
                 Chip(label: Text(p.estado.etiqueta)),
               ],
             ),
             for (final item in p.items)
-              Text('${item.cantidad} × ${item.nombre} (${item.descripcion})'
-                  '${item.notas.isEmpty ? '' : ' · ${item.notas}'}'),
+              Text(
+                '${item.cantidad} × ${item.nombre} (${item.descripcion})'
+                '${item.notas.isEmpty ? '' : ' · ${item.notas}'}',
+              ),
             if (p.pendiente) const Text('(sin enviar)'),
             Align(
               alignment: Alignment.centerRight,
               child: enPreparacion
                   ? FilledButton(
                       onPressed: () => vm.marcarListo(p),
-                      child: const Text('Marcar listo'))
+                      child: const Text('Marcar listo'),
+                    )
                   : OutlinedButton(
                       onPressed: _validarCodigo,
-                      child: const Text('Entregar con código')),
+                      child: const Text('Entregar con código'),
+                    ),
             ),
           ],
         ),

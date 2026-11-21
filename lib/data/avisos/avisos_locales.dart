@@ -5,17 +5,23 @@ final _avisos = FlutterLocalNotificationsPlugin();
 Future<void> iniciarAvisos() async {
   const android = AndroidInitializationSettings('@mipmap/ic_launcher');
   await _avisos.initialize(
-      settings: const InitializationSettings(android: android));
+    settings: const InitializationSettings(android: android),
+  );
   await _avisos
       .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+        AndroidFlutterLocalNotificationsPlugin
+      >()
       ?.requestNotificationsPermission();
 }
 
 Future<void> avisarPedidoListo(String claimId) async {
   const detalles = NotificationDetails(
-    android: AndroidNotificationDetails('pedidos', 'Pedidos',
-        importance: Importance.high, priority: Priority.high),
+    android: AndroidNotificationDetails(
+      'pedidos',
+      'Pedidos',
+      importance: Importance.high,
+      priority: Priority.high,
+    ),
   );
   await _avisos.show(
     id: claimId.hashCode,

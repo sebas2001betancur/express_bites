@@ -3,7 +3,11 @@ import 'package:express_bites/presentation/comun/formato.dart';
 import 'package:flutter/material.dart';
 
 class ProductoCard extends StatelessWidget {
-  const ProductoCard({super.key, required this.producto, required this.onVerDetalle});
+  const ProductoCard({
+    super.key,
+    required this.producto,
+    required this.onVerDetalle,
+  });
 
   final Producto producto;
   final VoidCallback onVerDetalle;
@@ -27,27 +31,39 @@ class ProductoCard extends StatelessWidget {
                   color: tema.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(Icons.restaurant, size: 36, color: tema.colorScheme.primary),
+                child: Icon(
+                  Icons.restaurant,
+                  size: 36,
+                  color: tema.colorScheme.primary,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(producto.nombre,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: tema.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    Text(
+                      producto.nombre,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: tema.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 4),
                     Text(producto.categoria, style: tema.textTheme.bodySmall),
-                    Text('${producto.minutosPreparacion} min',
-                        style: tema.textTheme.bodySmall),
+                    Text(
+                      '${producto.minutosPreparacion} min',
+                      style: tema.textTheme.bodySmall,
+                    ),
                   ],
                 ),
               ),
               const SizedBox(width: 8),
-              Text(formatoPrecio(producto.precio), style: tema.textTheme.titleMedium),
+              Text(
+                formatoPrecio(producto.precio),
+                style: tema.textTheme.titleMedium,
+              ),
             ],
           ),
         ),

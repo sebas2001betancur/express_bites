@@ -12,14 +12,16 @@ class PedidosClienteViewModel extends ChangeNotifier {
     required String uid,
     required Future<void> Function(String claimId) avisar,
   }) : _avisar = avisar {
-    _suscripcion = pedidos.observarMios(uid).listen(
-      _alRecibir,
-      onError: (Object _) {
-        lista ??= const [];
-        error = 'No se pudieron leer tus pedidos';
-        _notificar();
-      },
-    );
+    _suscripcion = pedidos
+        .observarMios(uid)
+        .listen(
+          _alRecibir,
+          onError: (Object _) {
+            lista ??= const [];
+            error = 'No se pudieron leer tus pedidos';
+            _notificar();
+          },
+        );
   }
 
   final Future<void> Function(String claimId) _avisar;

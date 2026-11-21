@@ -57,7 +57,10 @@ class AvisoSinConexion extends StatelessWidget {
           Icon(Icons.wifi_off, size: 18, color: colores.onErrorContainer),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(texto, style: TextStyle(color: colores.onErrorContainer)),
+            child: Text(
+              texto,
+              style: TextStyle(color: colores.onErrorContainer),
+            ),
           ),
         ],
       ),

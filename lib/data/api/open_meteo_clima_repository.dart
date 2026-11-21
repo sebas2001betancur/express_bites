@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 class OpenMeteoClimaRepository implements ClimaRepository {
   OpenMeteoClimaRepository([http.Client? cliente])
-      : _cliente = cliente ?? http.Client();
+    : _cliente = cliente ?? http.Client();
 
   final http.Client _cliente;
 
@@ -23,13 +23,15 @@ class OpenMeteoClimaRepository implements ClimaRepository {
   @override
   Future<Clima> actual() async {
     try {
-      final respuesta =
-          await _cliente.get(_url).timeout(const Duration(seconds: 5));
+      final respuesta = await _cliente
+          .get(_url)
+          .timeout(const Duration(seconds: 5));
       if (respuesta.statusCode != 200) {
         throw Falla('servidor-${respuesta.statusCode}');
       }
       return ClimaDto.desdeJson(
-          jsonDecode(respuesta.body) as Map<String, dynamic>);
+        jsonDecode(respuesta.body) as Map<String, dynamic>,
+      );
     } on Falla {
       rethrow;
     } on TimeoutException {

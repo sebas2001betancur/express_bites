@@ -46,7 +46,10 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
     catalogo = CatalogoViewModel(productos: d.productos, clima: d.clima);
     carrito = CarritoViewModel(pedidos: d.pedidos, uid: widget.usuario.uid);
     misPedidos = PedidosClienteViewModel(
-        pedidos: d.pedidos, uid: widget.usuario.uid, avisar: d.avisarPedidoListo);
+      pedidos: d.pedidos,
+      uid: widget.usuario.uid,
+      avisar: d.avisarPedidoListo,
+    );
   }
 
   @override
@@ -63,7 +66,9 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
   Future<void> _abrirDetalle(Producto producto) async {
     final item = await Navigator.push<ItemPedido>(
       context,
-      MaterialPageRoute(builder: (_) => DetalleProductoPantalla(producto: producto)),
+      MaterialPageRoute(
+        builder: (_) => DetalleProductoPantalla(producto: producto),
+      ),
     );
     if (item != null) carrito.agregar(item);
   }
@@ -72,7 +77,8 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
     final activo = misPedidos.activo;
     if (activo == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No tienes un pedido en curso')));
+        const SnackBar(content: Text('No tienes un pedido en curso')),
+      );
       return;
     }
     _abrir(TicketPantalla(inicial: activo, seguimiento: misPedidos));
@@ -93,8 +99,13 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
             ),
             IconButton(
               tooltip: 'Carrito',
-              onPressed: () => _abrir(CarritoPantalla(
-                  carrito: carrito, catalogo: catalogo, seguimiento: misPedidos)),
+              onPressed: () => _abrir(
+                CarritoPantalla(
+                  carrito: carrito,
+                  catalogo: catalogo,
+                  seguimiento: misPedidos,
+                ),
+              ),
               icon: Badge(
                 isLabelVisible: carrito.cantidadTotal > 0,
                 label: Text('${carrito.cantidadTotal}'),
@@ -104,12 +115,14 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
             IconButton(
               icon: const Icon(Icons.person),
               tooltip: 'Mi perfil',
-              onPressed: () => _abrir(PerfilPantalla(
-                usuario: widget.usuario,
-                cuenta: widget.cuenta,
-                tema: widget.tema,
-                seguimiento: misPedidos,
-              )),
+              onPressed: () => _abrir(
+                PerfilPantalla(
+                  usuario: widget.usuario,
+                  cuenta: widget.cuenta,
+                  tema: widget.tema,
+                  seguimiento: misPedidos,
+                ),
+              ),
             ),
           ],
         ),
@@ -119,7 +132,10 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
               if (catalogo.sinConexion) const AvisoSinConexion(),
               ClimaTarjeta(viewModel: catalogo),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 child: TextField(
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search),
@@ -134,7 +150,10 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
                 height: 52,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -165,7 +184,8 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
   }
 
   Widget _lista() {
-    if (catalogo.cargando) return const Center(child: CircularProgressIndicator());
+    if (catalogo.cargando)
+      return const Center(child: CircularProgressIndicator());
     final error = catalogo.error;
     if (error != null && catalogo.todos.isEmpty) {
       return EstadoMensaje(icono: Icons.cloud_off, texto: error);
@@ -173,7 +193,9 @@ class _CatalogoPantallaState extends State<CatalogoPantalla> {
     final productos = catalogo.visibles;
     if (productos.isEmpty) {
       return const EstadoMensaje(
-          icono: Icons.search_off, texto: 'No hay productos disponibles');
+        icono: Icons.search_off,
+        texto: 'No hay productos disponibles',
+      );
     }
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 12),

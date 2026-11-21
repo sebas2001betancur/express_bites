@@ -16,11 +16,11 @@ class Producto {
   final bool disponible;
 
   Producto conDisponible(bool valor) => Producto(
-        id: id,
-        nombre: nombre,
-        categoria: categoria,
-        precio: precio,
-        minutosPreparacion: minutosPreparacion,
-        disponible: valor,
-      );
+    id: id,
+    nombre: nombre,
+    categoria: categoria,
+    precio: precio,
+    minutosPreparacion: minutosPreparacion,
+    disponible: valor,
+  );
 }

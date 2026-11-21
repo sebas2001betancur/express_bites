@@ -8,7 +8,11 @@ import 'package:express_bites/presentation/tema/tema_view_model.dart';
 import 'package:flutter/material.dart';
 
 class RaizPantalla extends StatefulWidget {
-  const RaizPantalla({super.key, required this.dependencias, required this.tema});
+  const RaizPantalla({
+    super.key,
+    required this.dependencias,
+    required this.tema,
+  });
 
   final Dependencias dependencias;
   final TemaViewModel tema;
@@ -32,25 +36,27 @@ class _RaizPantallaState extends State<RaizPantalla> {
       listenable: cuenta,
       builder: (context, _) {
         if (cuenta.cargando) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
         final usuario = cuenta.usuario;
         if (usuario == null) return LoginPantalla(viewModel: cuenta);
         return switch (usuario.rol) {
           Rol.cliente => CatalogoPantalla(
-              key: ValueKey(usuario.uid),
-              usuario: usuario,
-              dependencias: widget.dependencias,
-              cuenta: cuenta,
-              tema: widget.tema,
-            ),
+            key: ValueKey(usuario.uid),
+            usuario: usuario,
+            dependencias: widget.dependencias,
+            cuenta: cuenta,
+            tema: widget.tema,
+          ),
           Rol.personal => PedidosPersonalPantalla(
-              key: ValueKey(usuario.uid),
-              usuario: usuario,
-              dependencias: widget.dependencias,
-              cuenta: cuenta,
-              tema: widget.tema,
-            ),
+            key: ValueKey(usuario.uid),
+            usuario: usuario,
+            dependencias: widget.dependencias,
+            cuenta: cuenta,
+            tema: widget.tema,
+          ),
         };
       },
     );

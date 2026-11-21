@@ -34,7 +34,10 @@ void main() {
     vm.agregar(item);
     vm.elegirHora(ahora.add(const Duration(minutes: 10)));
     expect(await vm.confirmar(), isNull);
-    expect(vm.error, 'La recogida debe ser al menos 15 minutos después de ahora');
+    expect(
+      vm.error,
+      'La recogida debe ser al menos 15 minutos después de ahora',
+    );
   });
 
   test('las cantidades suman y quitan ítems', () {
@@ -57,29 +60,34 @@ void main() {
     expect(vm.error, isNull);
   });
 
-  test('sin conexión conserva el carrito y reintenta con el mismo id', () async {
-    vm.agregar(item);
-    vm.elegirAtajo(const Duration(minutes: 15));
-    pedidos.falloAlCrear = const Falla('sin-conexion');
+  test(
+    'sin conexión conserva el carrito y reintenta con el mismo id',
+    () async {
+      vm.agregar(item);
+      vm.elegirAtajo(const Duration(minutes: 15));
+      pedidos.falloAlCrear = const Falla('sin-conexion');
 
-    expect(await vm.confirmar(), isNull);
-    expect(vm.items, hasLength(1));
-    expect(vm.error, 'Sin conexión: revisa tu internet');
+      expect(await vm.confirmar(), isNull);
+      expect(vm.items, hasLength(1));
+      expect(vm.error, 'Sin conexión: revisa tu internet');
 
-    expect(await vm.confirmar(), isNotNull);
-    expect(pedidos.idsUsados, hasLength(2));
-    expect(pedidos.idsUsados.toSet(), hasLength(1));
-  });
+      expect(await vm.confirmar(), isNotNull);
+      expect(pedidos.idsUsados, hasLength(2));
+      expect(pedidos.idsUsados.toSet(), hasLength(1));
+    },
+  );
 
-  test('si se cambia el carrito tras un fallo, el reintento usa el mismo id',
-      () async {
-    vm.agregar(item);
-    vm.elegirAtajo(const Duration(minutes: 15));
-    pedidos.falloAlCrear = const Falla('sin-conexion');
-    expect(await vm.confirmar(), isNull);
+  test(
+    'si se cambia el carrito tras un fallo, el reintento usa el mismo id',
+    () async {
+      vm.agregar(item);
+      vm.elegirAtajo(const Duration(minutes: 15));
+      pedidos.falloAlCrear = const Falla('sin-conexion');
+      expect(await vm.confirmar(), isNull);
 
-    vm.cambiarCantidad(0, 1);
-    expect(await vm.confirmar(), isNotNull);
-    expect(pedidos.idsUsados.toSet(), hasLength(1));
-  });
+      vm.cambiarCantidad(0, 1);
+      expect(await vm.confirmar(), isNotNull);
+      expect(pedidos.idsUsados.toSet(), hasLength(1));
+    },
+  );
 }

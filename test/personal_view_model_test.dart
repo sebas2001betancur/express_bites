@@ -11,14 +11,14 @@ void main() {
   late PedidosPersonalViewModel vm;
 
   Future<Pedido> crear() => pedidos.crear(
-        pedidos.nuevoId(),
-        'cliente1',
-        NuevoPedido(
-          items: [armarItem(cafe, tamano: 'Grande')],
-          recogida: DateTime(2026, 11, 20, 11),
-          ahora: DateTime(2026, 11, 20, 10),
-        ),
-      );
+    pedidos.nuevoId(),
+    'cliente1',
+    NuevoPedido(
+      items: [armarItem(cafe, tamano: 'Grande')],
+      recogida: DateTime(2026, 11, 20, 11),
+      ahora: DateTime(2026, 11, 20, 10),
+    ),
+  );
 
   setUp(() {
     pedidos = PedidosEnMemoria();
@@ -37,7 +37,10 @@ void main() {
   test('un código que no existe devuelve un mensaje (HU-06)', () async {
     await crear();
     await esperar();
-    expect(await vm.entregarPorCodigo('EB-NOEXISTE'), contains('No hay un pedido activo'));
+    expect(
+      await vm.entregarPorCodigo('EB-NOEXISTE'),
+      contains('No hay un pedido activo'),
+    );
   });
 
   test('el código correcto entrega y no permite doble despacho', () async {
@@ -48,13 +51,19 @@ void main() {
     expect(await vm.entregarPorCodigo(' ${p.claimId.toLowerCase()} '), isNull);
     await esperar();
     expect(vm.lista, isEmpty);
-    expect(await vm.entregarPorCodigo(p.claimId), contains('No hay un pedido activo'));
+    expect(
+      await vm.entregarPorCodigo(p.claimId),
+      contains('No hay un pedido activo'),
+    );
   });
 
   test('no entrega un pedido que aún está en preparación', () async {
     final p = await crear();
     await esperar();
-    expect(await vm.entregarPorCodigo(p.claimId), contains('aún no está listo'));
+    expect(
+      await vm.entregarPorCodigo(p.claimId),
+      contains('aún no está listo'),
+    );
     await esperar();
     expect(vm.lista, hasLength(1));
   });

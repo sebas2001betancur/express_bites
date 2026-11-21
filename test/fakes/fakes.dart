@@ -26,13 +26,26 @@ const cafe = Producto(
 
 const menuDePrueba = [
   cafe,
-  Producto(id: 'p2', nombre: 'Jugo de Mora', categoria: 'Bebidas frías', precio: 4000, minutosPreparacion: 4),
-  Producto(id: 'p3', nombre: 'Croissant', categoria: 'Repostería', precio: 3000, minutosPreparacion: 2, disponible: false),
+  Producto(
+    id: 'p2',
+    nombre: 'Jugo de Mora',
+    categoria: 'Bebidas frías',
+    precio: 4000,
+    minutosPreparacion: 4,
+  ),
+  Producto(
+    id: 'p3',
+    nombre: 'Croissant',
+    categoria: 'Repostería',
+    precio: 3000,
+    minutosPreparacion: 2,
+    disponible: false,
+  ),
 ];
 
 class ProductosEnMemoria implements ProductosRepository {
   ProductosEnMemoria([List<Producto> iniciales = const []])
-      : _productos = [...iniciales] {
+    : _productos = [...iniciales] {
     emitir();
   }
 
@@ -78,7 +91,8 @@ class PedidosEnMemoria implements PedidosRepository {
   void emitir() {
     _mios.add(List.of(pedidos));
     _activos.add(
-        pedidos.where((p) => p.estado != EstadoPedido.entregado).toList());
+      pedidos.where((p) => p.estado != EstadoPedido.entregado).toList(),
+    );
   }
 
   @override

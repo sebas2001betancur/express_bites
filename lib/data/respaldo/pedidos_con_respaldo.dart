@@ -17,7 +17,9 @@ class PedidosConRespaldo implements PedidosRepository {
   Future<Pedido> crear(String id, String uid, NuevoPedido nuevo) async {
     final pedido = await _nube.crear(id, uid, nuevo);
     try {
-      await _local.guardar(pedido); // el ticket queda en el teléfono (HU-04, HU-07)
+      await _local.guardar(
+        pedido,
+      ); // el ticket queda en el teléfono (HU-04, HU-07)
     } on Falla {
       // best-effort: el pedido ya existe en la nube
     }
