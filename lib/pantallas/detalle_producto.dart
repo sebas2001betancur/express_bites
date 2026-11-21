@@ -123,7 +123,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             DropdownButtonFormField<String>(
-              value: _lecheSeleccionada,
+              initialValue: _lecheSeleccionada,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Selecciona una opción',
